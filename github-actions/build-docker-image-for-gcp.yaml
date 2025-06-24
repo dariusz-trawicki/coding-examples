@@ -1,0 +1,58 @@
+name: Build docker image (using workflow identity)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_image_with_workflow_identity:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      CI_REGISTRY_IMAGE: "europe-west1-docker.pkg.dev/xxx/iac-admin-panel-workflow-identity/admin-panel-yyy"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get git describe output
+        run: |
+          GIT_DESCRIBE_OUTPUT=$(git describe)
+          echo "GIT_DESCRIBE_OUTPUT=$GIT_DESCRIBE_OUTPUT" >> "$GITHUB_ENV"
+
+      - name: Use git describe output
+        run: |
+          echo "${{ env.GIT_DESCRIBE_OUTPUT }}"
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "projects/123456/locations/global/workloadIdentityPools/github-pool123/providers/github-provider"
+          service_account: "artifact-writer-wi@xxx.iam.gserviceaccount.com"
+
+      - name: Debug OIDC
+        run: |
+          echo "OIDC URL: $ACTIONS_ID_TOKEN_REQUEST_URL"
+          echo "OIDC Token: $ACTIONS_ID_TOKEN_REQUEST_TOKEN"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Docker / auth
+        run: |
+          gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      - name: Build docker image
+        run: |
+          echo "${{ env.GIT_DESCRIBE_OUTPUT }}" > version.txt
+          git diff
+          docker build -f Dockerfile -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:${{ env.GIT_DESCRIBE_OUTPUT }} .
+
+      - name: Push docker image
+        run: |
+          docker push $CI_REGISTRY_IMAGE:latest
+          docker push $CI_REGISTRY_IMAGE:${{ env.GIT_DESCRIBE_OUTPUT }}
