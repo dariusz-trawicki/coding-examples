@@ -1,0 +1,61 @@
+name: Minor release / form vx.y.z to vx.y+1.z
+
+on:
+  schedule:
+    - cron: "0 2 * * 1" # Monday: 02:00
+  workflow_dispatch: # manually
+
+permissions:
+  contents: write # Ensure the token has write access
+
+jobs:
+  check_changes_job:
+    name: Check for changes
+    runs-on: ubuntu-22.04
+
+    outputs:
+      changes_detected: ${{ steps.check.outputs.changes_detected }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetching the full commit history
+
+      - name: Check for changes in the last week (2 minute for last action)
+        id: check
+        run: |
+          if [ "$(git log --since='6 days 23 hours 58 minutes ago' --oneline)" ]; then
+            echo "::set-output name=changes_detected::true"
+          else
+            echo "::set-output name=changes_detected::false"
+          fi
+
+  minor_release_job:
+    name: minor_realease
+    needs: check_changes_job # The job patch_release will be triggered only after the completion of the job check_changes.
+    if: needs.check_changes_job.outputs.changes_detected == 'true'
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.4
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run version patch and push changes to GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "GitHub Action" 
+          git config user.email "action@github.com"
+          npm version minor -m "chore: release version %s" --loglevel verbose
+          git push origin HEAD
+          git push --tags
