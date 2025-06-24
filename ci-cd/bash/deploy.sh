@@ -12,7 +12,7 @@ echo "Triggering GitHub Actions workflow..."
 
 # parameters
 REPO=$(terraform output -raw github_repository)
-REF="main"                          # branch, e.g. main/dev
+REF="main"
 WORKFLOW_FILE="dev-deploy.yaml"
 
 # Run GitHub action
