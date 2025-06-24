@@ -5,5 +5,5 @@
 
 ```bash
 docker-compose up --build
-# Kafka might take a few minutes to fully start up.
+# NOTE: Kafka might take a few minutes to fully start up.
 ```
