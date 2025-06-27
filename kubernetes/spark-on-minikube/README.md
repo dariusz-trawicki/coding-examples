@@ -1,4 +1,7 @@
-# Deploying Spark on Kubernetes (Minikube)
+# Deploying Spark on Kubernetes (Minikube) example
+
+This example based on Ganesh Walavalkar’s post
+(https://wganesh.medium.com/spark-on-minikube-d577e92539be)
 
 ## Start the cluster:
 
@@ -118,7 +121,13 @@ Run the following code after the `PySpark prompt` appears, type the following co
 >>> data = sc.parallelize(seq)
 >>> counts = data.map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b).collect()
 >>> dict(counts)                                                                
-{'quick': 2, 'the': 4, 'brown': 2, 'fox': 2, 'jumps': 2, 'over': 2, 'lazy': 2, 'dog': 2}
+# {'quick': 2, 'the': 4, 'brown': 2, 'fox': 2, 'jumps': 2, 'over': 2, 'lazy': 2, 'dog': 2}
 >>> sc.stop()
 >>> quit()
+```
+
+## Cleaning
+
+```bash
+./delete.sh
 ```
