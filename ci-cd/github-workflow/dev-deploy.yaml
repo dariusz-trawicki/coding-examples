@@ -1,0 +1,140 @@
+name: DEV ENV. > Build and Push to ECR and Deploy to ECS
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+#   push:
+#     branches:
+#       - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ${{ secrets.DEV_AWS_REGION }}
+  AWS_ACCOUNT_ID: ${{ secrets.DEV_AWS_ACCOUNT_ID }}
+  S3_BUCKET_NAME: ${{ secrets.DEV_S3_BUCKET_NAME }}
+  AWS_DB_SECRET_NAME: db_secret
+  AWS_ACCESS_KEY_SECRET_NAME: aws_access_key_secret
+  AWS_SESSION_TOKEN_SECRET_NAME: secret_session_token
+
+  IMAGE_TAG: latest
+
+  CPU: 1024
+  MEMORY: 2048
+  CONTAINER_PORT: 3000
+  NETWORK_MODE: awsvpc
+  HEALTH_CHECK_INTERVAL: 30
+  HEALTH_CHECK_TIMEOUT: 5
+  HEALTH_CHECK_RETRIES: 3
+  HEALTH_CHECK_START_PERIOD: 10
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-oidc-role
+          role-session-name: github-actions-session
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Fetch secrets from AWS Secrets Manager
+        id: fetch_secrets
+        run: |
+          DB_SECRET=$(aws secretsmanager get-secret-value --secret-id $AWS_DB_SECRET_NAME --query SecretString --output text)
+          DB_USERNAME=$(echo "$DB_SECRET" | jq -r '.user_name')
+          DB_PASSWORD=$(echo "$DB_SECRET" | jq -r '.password')
+          echo "MONGO_INITDB_ROOT_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
+          echo "MONGO_INITDB_ROOT_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+          
+          AWS_ACCESS_KEY_SECRET=$(aws secretsmanager get-secret-value --secret-id $AWS_ACCESS_KEY_SECRET_NAME --query SecretString --output text)
+          MY_AWS_ACCESS_KEY_ID=$(echo "$AWS_ACCESS_KEY_SECRET" | jq -r '.aws_access_key_id')
+          MY_AWS_SECRET_ACCESS_KEY=$(echo "$AWS_ACCESS_KEY_SECRET" | jq -r '.aws_secret_access_key')
+          echo "MY_AWS_ACCESS_KEY_ID=$MY_AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
+          echo "MY_AWS_SECRET_ACCESS_KEY=$MY_AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push Docker image to ECR
+        run: |
+          IMAGE_URI=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+          echo "Building image: $IMAGE_URI"
+
+          docker build \
+            --build-arg NEXT_PUBLIC_AWS_REGION=$AWS_REGION \
+            --build-arg AWS_ACCESS_KEY_ID=$MY_AWS_ACCESS_KEY_ID \
+            --build-arg AWS_SECRET_ACCESS_KEY=$MY_AWS_SECRET_ACCESS_KEY \
+            --build-arg MONGO_URL=$MONGO_URL \
+            --build-arg DB_NAME=$DB_NAME \
+            --build-arg S3_BUCKET_NAME=$S3_BUCKET_NAME \
+            --build-arg MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME \
+            --build-arg MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD \
+            -t $IMAGE_URI .
+
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
+          
+          docker push $IMAGE_URI
+
+      - name: Generate build timestamp
+        run: |
+          echo "BUILD_TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
+
+      - name: Update ecs-task-def.json with image, role, timestamp, ect.
+        run: |
+          jq \
+            --arg REGION "$AWS_REGION" \
+            --arg IMAGE "$IMAGE_URI" \
+            --arg CPU "$CPU" \
+            --arg MEMORY "$MEMORY" \
+            --arg FAMILY "$FAMILY" \
+            --arg NETWORK_MODE "$NETWORK_MODE" \
+            --arg CONTAINER_DEF_NAME "$CONTAINER_DEF_NAME" \
+            --arg AWS_LOGS_GROUP "$AWS_LOGS_GROUP" \
+            --arg AWS_LOGS_STREAM_PREFIX "$AWS_LOGS_STREAM_PREFIX" \
+            --argjson PORT $CONTAINER_PORT \
+            --argjson HEALTH_CHECK_INTERVAL $HEALTH_CHECK_INTERVAL \
+            --argjson HEALTH_CHECK_TIMEOUT $HEALTH_CHECK_TIMEOUT \
+            --argjson HEALTH_CHECK_RETRIES $HEALTH_CHECK_RETRIES \
+            --argjson HEALTH_CHECK_START_PERIOD $HEALTH_CHECK_START_PERIOD \
+            '
+            .family = $FAMILY |
+            .networkMode = "$NETWORK_MODE" |
+            .executionRoleArn = $EXEC |
+            .taskRoleArn = $TASK |
+            .cpu = ($CPU|tostring) |
+            .memory = ($MEMORY|tostring) |
+            .networkMode = $NETWORK_MODE |
+            .containerDefinitions[0].name = $CONTAINER_DEF_NAME |
+            .containerDefinitions[0].image = $IMAGE |
+            .containerDefinitions[0].essential = true |
+            .containerDefinitions[0].portMappings[0].containerPort = $PORT |
+            .containerDefinitions[0].portMappings[0].protocol = "tcp" |
+            .containerDefinitions[0].logConfiguration.logDriver = "awslogs" |
+            .containerDefinitions[0].logConfiguration.options."awslogs-group" = $AWS_LOGS_GROUP |
+            .containerDefinitions[0].logConfiguration.options."awslogs-region" = $REGION |
+            .containerDefinitions[0].logConfiguration.options."awslogs-stream-prefix" = $AWS_LOGS_STREAM_PREFIX |
+            .containerDefinitions[0].healthCheck.command = ["CMD-SHELL", "curl -f http://$(hostname -i):\($PORT)/api/health || exit 1"] |
+            .containerDefinitions[0].healthCheck.interval = $HEALTH_CHECK_INTERVAL |
+            .containerDefinitions[0].healthCheck.timeout = $HEALTH_CHECK_TIMEOUT |
+            .containerDefinitions[0].healthCheck.retries = $HEALTH_CHECK_RETRIES |
+            .containerDefinitions[0].healthCheck.startPeriod = $HEALTH_CHECK_START_PERIOD |
+            .containerDefinitions[0].environment = [{"name": "BUILD_TIMESTAMP", "value": $TIME}]
+            ' \
+            .github/workflows/ecs-task-def.json > tmp.json && mv tmp.json .github/workflows/ecs-task-def.json
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: .github/workflows/ecs-task-def.json
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
