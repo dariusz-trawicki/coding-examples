@@ -62,7 +62,6 @@ SELECT * FROM avg_temperatures ORDER BY timestamp DESC LIMIT 5;
 1. Check that Kafka is receiving data:
 
 ```bash
-# sprawdzam czy temet istnieje
 # Check if the topic exists:
 docker exec -it 03-iot-kafka-db-spark-promet-grafana-kafka-1 \
   /opt/bitnami/kafka/bin/kafka-topics.sh \
