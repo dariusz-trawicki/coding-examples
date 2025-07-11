@@ -58,37 +58,12 @@ Info: `https://www.astronomer.io/docs/astro/cli/overview`
 ```bash
 # installation
 brew install astro
-
-# Test
-astro version
-
-mkdir airflow
-cd airflow
-code .
-
-# initiall airflow project
-astro dev init
-```
-
-Modify the `Dockerfile` file:
-
-Replace the line:
-
-```Dockerfile
-FROM astrocrpublic.azurecr.io/runtime:3.0-4  # latest
-```
-
-with:
-
-```Dockerfile
-FROM quay.io/astronomer/astro-runtime:12.9.0
 ```
 
 Run:
 
 ```bash
 # Start Airflow (uses Docker) – requires port 8080 to be available.
-
 astro dev start
 # *** output ***
 # Project started
@@ -132,7 +107,7 @@ astro dev bash # Execing into the scheduler container
 astro dev stop
 
 cd spark/master
-docker build -t airflow/spark-master .     # airflow/spark-master - image name
+docker build -t airflow/spark-master .
 
 cd ../worker
 docker build -t airflow/spark-worker .
@@ -236,7 +211,7 @@ astro dev run dags test stock_market 2025-01-01
 # ...
 ```
 
-### Task `store_prices` - store prices (using/in `MinIO`)
+### Task `store_prices` (using/in `MinIO`)
 
 In `stock_market.py` set:
 
@@ -256,7 +231,7 @@ astro dev run dags test stock_market 2025-01-01
 # and click NVDA > formatted_prices
 ```
 
-### Task `format_prices`: formatting prices (with `Spark`)  
+### Task `format_prices`: formatting prices with `Spark`  
 
 In `stock_market.py` set:
 
@@ -272,7 +247,7 @@ astro dev run dags test stock_market 2025-01-01
 # and click NVDA > formatted_prices
 ```
 
-### Task `load_to_dw`: load the data into data warehouses with Postgres and Astro SDK - complite pieline
+### Task `load_to_dw`: load the data into data warehouses with Postgres and Astro SDK - complite pipeline
 
 In `stock_market.py` set:
 
@@ -287,7 +262,7 @@ astro dev run dags test stock_market 2025-01-01
 
 docker exec -it airflow_30f904-postgres-1 bash
 root@fca7af4da816:/# psql -U postgres
-postgres=# \dt *.*;
+# postgres=# \dt *.*;
 postgres=# SELECT * FROM stock_market;
 # *** output ***
 # timestamp  |       close        |        high        |        low         |        open        |  volume   |    date    

@@ -111,9 +111,6 @@ Make sure that the `STATE` is shown as `UP`.
   - Select another metric, e.g. `average_temperature` → then click `Use query`
 - Under `Panel Options` (right side), name the panel (e.g. `Temperature`)
 
-
-
-
 #### IF NEEDED: Reset and rebuild
 Stop all containers and remove old volumes:
 
