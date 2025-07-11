@@ -29,7 +29,8 @@ kubectl get pods -l "release=prometheus"
 
 ```bash
 kubectl get secret prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
-# Output: admin user password (e.g.: "prom-operator")
+# *** output: *** 
+# admin user, password (e.g.: "prom-operator")
 ```
 
 ## Access Grafana locally
