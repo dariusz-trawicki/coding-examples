@@ -12,8 +12,9 @@ brew install astro
 ## Run
 
 ```bash
-# astro dev stop # if needed
-astro dev start
+astro dev start                      # 60 sec. for running (default)
+# OR (if needed):
+astro dev start --wait 180s          # 180 sec for running
 ```
 
 ### First DAG

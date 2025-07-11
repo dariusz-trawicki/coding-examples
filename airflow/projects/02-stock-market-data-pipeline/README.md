@@ -64,12 +64,17 @@ Run:
 
 ```bash
 # Start Airflow (uses Docker) – requires port 8080 to be available.
-astro dev start
+cd airflow
+astro dev start                      # 60 sec. for running (default)
+# OR (if needed):
+astro dev start --wait 180s          # 180 sec for running
 # *** output ***
 # Project started
 # ➤ Airflow UI: http://localhost:8080
 # ➤ Postgres Database: postgresql://localhost:5432/postgres
-# ➤ The default Airflow UI credentials are: admin:admin
+# ➤ The default Airflow UI credentials are: 
+#   - user: admin
+#   - pass: admin
 # ➤ The default Postgres DB credentials are: postgres:postgres
 ```
 
@@ -104,8 +109,6 @@ astro dev bash # Execing into the scheduler container
 ### Build Docker images
 
 ```bash
-astro dev stop
-
 cd spark/master
 docker build -t airflow/spark-master .
 
@@ -115,10 +118,10 @@ docker build -t airflow/spark-worker .
 cd ../notebooks/stock_transform
 docker build -t airflow/stock-app .
 
-cd ../..
-astro dev  start                     # 60 sec. for running
-# or (if needed):
-astro dev start --wait 180s          # 180 sec for running (if needed)
+cd ../../..
+astro dev restart                      # 60 sec. for running (default)
+# OR (if needed):
+astro dev restart --wait 180s          # 180 sec for running
 # *** output ***
 # ✔ Project image has been updated
 # ✔ Project started
@@ -133,10 +136,12 @@ astro dev start --wait 180s          # 180 sec for running (if needed)
 #### Create `Yahoo api connection` 
 
 In UI: `Admin > Conncetion > Add a new record`, set:
-- Name: `stock_api`
+- Connection ID: `stock_api`
 - Connection Type: `HTTP`
-- host: `https://query1.finance.yahoo.com/`
-- Extra:
+- Host: `https://query1.finance.yahoo.com/`
+- Login:    <empty>
+- Password: <empty>
+- Extra > put json code:
 
 ```json
 {
@@ -152,7 +157,7 @@ In UI: `Admin > Conncetion > Add a new record`, set:
 #### Create `MinIO connection` 
 
 In UI: `Admin > Conncetion > Add a new record`, set:
-- Name: `minio`
+- Connection ID: `minio`
 - Connection Type: `Amazon Web Service`
 - AWS access key: `minio`
 - AWS secret access key: `minio123`
@@ -167,11 +172,11 @@ In UI: `Admin > Conncetion > Add a new record`, set:
 #### Create connection for `Postgres`:
 
 In UI: `Admin > Conncetion > Add a new record`, set:
-- Name: `postgres`
+- Connection ID: `postgres`
 - Connection Type: `Postgres`
-- host: `postgres`
-- login: `postgres`
-- pass: `postgres`
+- Host: `postgres`
+- Login: `postgres`
+- Password: `postgres`
 - port: 5432
 
 
@@ -260,8 +265,11 @@ Run:
 ```bash
 astro dev run dags test stock_market 2025-01-01
 
-docker exec -it airflow_30f904-postgres-1 bash
-root@fca7af4da816:/# psql -U postgres
+docker ps
+# *** output (example) ***
+# f4a326e78fa8   postgres:12.6                              "docker-entrypoint.s…"   16 minutes ago   Up 9 minutes               127.0.0.1:5432->5432/tcp                                   airflow_aacfa4-postgres-1
+docker exec -it airflow_9593d3-postgres-1 bash
+root@f4a326e78fa8:/# psql -U postgres
 # postgres=# \dt *.*;
 postgres=# SELECT * FROM stock_market;
 # *** output ***
@@ -270,7 +278,8 @@ postgres=# SELECT * FROM stock_market;
 #  1720618200 | 134.91000366210938 | 135.10000610351562 |  132.4199981689453 | 134.02999877929688 | 248978600 | 2024-07-10
 #  1720704600 |  127.4000015258789 | 136.14999389648438 |  127.0500030517578 |             135.75 | 374782700 | 2024-07-11
 #  1720791000 | 129.24000549316406 |  131.9199981689453 | 127.22000122070312 | 128.25999450683594 | 252680500 | 2024-07-12
-
+postgres=# exit
+root@f4a326e78fa8:/# exit
 # STOP:
 astro dev stop
 ```
