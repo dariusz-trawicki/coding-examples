@@ -38,7 +38,7 @@ jobs:
       - name: Read secret from Vault and create .env
         run: |
           key=$(vault kv get -field=API_KEY secret/ci/app)
-          echo "✅ API_KEY from Vault: $key"
+          echo "API_KEY from Vault: $key"
           mkdir -p /github/workspace
           echo "API_KEY=$key" > /github/workspace/.env
           echo ".env file created:"
