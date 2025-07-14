@@ -1,4 +1,4 @@
-# Kubernetes (minikube): create Secret z danych Vaulta
+# Kubernetes (Minikube): create a Kubernetes Secret using data retrieved from Vault
 
 ### Minikube
 
