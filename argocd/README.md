@@ -91,6 +91,7 @@ argocd app list
 Open your browser and go to: http://localhost:8080
 - In the `Applications panel`, click on the `myapp-argo-application` box
 - Inside the application view, click on the `myapp-xxxxxxxxxxxxxxx` Pod
+
 The container image listed as: `nginx:1.25`
 
 
@@ -126,4 +127,5 @@ Open your browser and go to: http://localhost:8080
 - In the `Applications panel`, click on the `myapp-argo-application` box
 - Click on the `REFRESH` button
 - Inside the application view, click on the `myapp-xxxxxxxxxxxxxxx` Pod
+
 The container image listed as: `nginx:1.27`
