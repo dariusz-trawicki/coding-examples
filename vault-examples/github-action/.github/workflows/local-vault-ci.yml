@@ -1,0 +1,46 @@
+name: Local Vault CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  local-test:
+    runs-on: ubuntu-latest
+
+    env:
+      VAULT_ADDR: http://host.docker.internal:8200
+      VAULT_TOKEN: hvs.zg4ybNWejyGEt2afe5RSxxxx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Vault CLI manually
+        run: |
+          curl -sLo vault.zip https://releases.hashicorp.com/vault/1.13.3/vault_1.13.3_linux_amd64.zip
+          unzip vault.zip
+          chmod +x vault
+          sudo mv vault /usr/local/bin/vault
+          vault --version
+
+      - name: Wait for Vault (optional)
+        run: |
+          echo "Checking Vault status..."
+          for i in {1..10}; do
+            if vault status > /dev/null 2>&1; then
+              echo "Vault is ready"
+              break
+            fi
+            echo "Waiting for Vault..."
+            sleep 1
+          done
+
+      - name: Read secret from Vault and create .env
+        run: |
+          key=$(vault kv get -field=API_KEY secret/ci/app)
+          echo "✅ API_KEY from Vault: $key"
+          mkdir -p /github/workspace
+          echo "API_KEY=$key" > /github/workspace/.env
+          echo ".env file created:"
+          cat /github/workspace/.env
+
