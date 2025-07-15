@@ -70,7 +70,7 @@ argocd login localhost:8080 --username admin --password BL-Z8aO5ZTAZvSQ5 --insec
 
 2. In the browser (UI)
 
-Open: http://localhost:8080, Username: `admin`, Password: `BL-Z8aO5ZTAZvSQ5`.
+Open: http://localhost:8080, (username: `admin`, password: `BL-Z8aO5ZTAZvSQ5`).
 
 
 ### Deploy ArgoCD Application Configuration

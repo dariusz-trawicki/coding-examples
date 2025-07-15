@@ -77,6 +77,18 @@ terraform init
 terraform plan
 terraform apply
 
+# Read the secret
+aws secretsmanager get-secret-value \
+  --secret-id my-app-db-secret \
+  --query SecretString \
+  --output text
+# *** output ***
+# {
+#   "db_username": "admin",
+#   "db_password": "secret123"
+# }
+
+# OR 
 # Open AWS console (in browser): AWS Secrets Manager > Secrets
 
 # Cleanning
