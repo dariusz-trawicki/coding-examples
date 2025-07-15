@@ -1,4 +1,4 @@
-# ArgoCD on Minikube
+# ArgoCD Installation in Minikube with Git-Backed Application State
 
 ```bash
 # Install ArgoCD CLI
