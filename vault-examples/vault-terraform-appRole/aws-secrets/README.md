@@ -1,4 +1,4 @@
-# AWS Secrets Manager: import danych z Vault
+# AWS Secrets Manager: import data from Vault
 
 ### Vault: AppRole configuration
 
