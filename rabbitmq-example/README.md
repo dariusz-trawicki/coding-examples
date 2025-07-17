@@ -60,7 +60,7 @@ In Terminal `2`, run:
 python send.py
 ```
 
-This script sends a message to the hello queue.
+This script sends a message to the `hello queue`.
 
 6. Check the Output
 
