@@ -176,19 +176,19 @@ On http://3.125.17.150:8080/ and create new project:
     - click `Add credentials` and:
       - choose Kind: `Secret text`, 
       - set:
-          - secret: `AKIBJ2XXXXXXXXXX` - my AWS ACCESS KEY ID value
+          - secret: `AKIBJ2XXXXXXXXXX`  (AWS access key id value)
           - as ID: `AWS_ACCESS_KEY_ID`
       - click `Create`
     - click `Add credentials` and:
       - choose Kind: `Secret text`, 
       - set:
-          - secret: `aoKjxxxxxxxxxx` - my AWS SECRET ACCESS KEY value
+          - secret: `aoKjxxxxxxxxxx`  (AWS secret access key value)
           - as ID: `AWS_SECRET_ACCESS_KEY`
       - click `Create`
 
 #### Jenkins pipeline code
 
-Open: `Jenkins > terraform-eks-cicd > Configure` -> `Pipeline` section and put the code into `Script` field (replace `ACCOUNT_NAME` with your `GitHub username`):
+Open: `Jenkins > terraform-eks-cicd > Configure` -> `Pipeline` section and put the code into `Script` field (replace `ACCOUNT_NAME` with real `GitHub username`):
 
 ```text
 pipeline {
