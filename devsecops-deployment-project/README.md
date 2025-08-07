@@ -221,7 +221,7 @@ aws configure
 # Default region name [None]: eu-central-1
 
 # configure the kubectl to communicate with the EKS cluster
-aws eks update-kubeconfig --name react-app-example-cluster --region eu-central-1
+aws eks update-kubeconfig --name react-app-example-eks --region eu-central-1
 kubectl get nodes
 # IF: command return error like:
 # err="couldn't get current server API group list: the server has asked for the client to provide credentials
@@ -234,12 +234,12 @@ aws sts get-caller-identity
 # }
 
 aws eks create-access-entry \
-  --cluster-name react-app-example-cluster \
+  --cluster-name react-app-example-eks \
   --region eu-central-1 \
   --principal-arn arn:aws:iam::25XXXXXX:user/USER_ACCOUNT_NAME
 
 aws eks associate-access-policy \
-  --cluster-name react-app-example-cluster \
+  --cluster-name react-app-example-eks \
   --region eu-central-1 \
   --principal-arn arn:aws:iam::25XXXXXX:user/USER_ACCOUNT_NAME \
   --policy-arn arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy \
