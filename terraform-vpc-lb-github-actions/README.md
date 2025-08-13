@@ -18,7 +18,7 @@ s3-backend       # Terraform configuration for AWS S3 bucket (for backend)
 
 ## 2. Deployment Workflow
 
-The deployment process is automated through a GitHub Actions workflow located at: `.github/workflows/deploy.yml`.
+The deployment process is automated through a `GitHub Actions workflow` located at: `.github/workflows/deploy.yml`.
 
 Whenever changes are pushed to the `main` branch, this workflow will:
 
@@ -45,10 +45,13 @@ cd ..
 
 ### 4. Create Github repo
 
-- Create Github public repo (e.g., name: `vpc-terraform-github-actions`).
-- **Create secrets**. Open `https://github.com/ACCOUNT_NAME/vpc-terraform-github-actions/settings/secrets/actions`. Add secrets:
-  - `AWS_ACCESS_KEY` with apropriate value
-  - `AWS_SECRET_ACCESS_KEY` with apropriate value
+Create Github public repo (e.g., name: `vpc-terraform-github-actions`).
+
+#### Create Github secrets 
+
+Open `https://github.com/ACCOUNT_NAME/vpc-terraform-github-actions/settings/secrets/actions`. Add secrets:
+- `AWS_ACCESS_KEY` with apropriate value
+- `AWS_SECRET_ACCESS_KEY` with apropriate value
 
 ---
 

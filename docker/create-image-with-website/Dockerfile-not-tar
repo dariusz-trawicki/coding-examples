@@ -1,0 +1,13 @@
+FROM ubuntu:latest
+LABEL "Author"="DT"
+LABEL "Project"="aqua"
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install git -y
+RUN apt install apache2 -y
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+EXPOSE 80
+WORKDIR /var/www/html
+VOLUME /var/log/apache2
+COPY . /var/www/html
+# ADD aqua.tar.gz /var/www/html
+# ADD - automaticly untar aqua.tar.gz
