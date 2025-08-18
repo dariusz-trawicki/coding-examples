@@ -78,17 +78,21 @@ terraform apply
 cd ..
 ```
 
-### Create EC2 instance  with Jenkins
+### Create EC2 instance with Jenkins
 
 ```bash
 cd jenkins-server
 # In backend.tf file update the s3 bucket name
 
+# Create AWS Key Pair (for connction to EC2 via `ssh`)
 aws ec2 create-key-pair \
   --key-name jenkins-server-key \
   --query 'KeyMaterial' \
   --output text > jenkins-server-key.pem
 chmod 400 jenkins-server-key.pem
+# Test
+aws ec2 describe-key-pairs --key-names jenkins-server-key
+# OR: in the AWS console visit: EC2 > Key pairs
 
 terraform init
 terraform plan
@@ -135,20 +139,9 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 # e7314b26f5c9434e844f8b31392da570
 ```
 
-#### AWS Key Pair (optional - for connction to EC2 via `ssh`)
-
-Create AWS Key Pair (for connction to EC2 [e.g.: `ssh -i jenkins-server-key.pem ec2-user@EC2_PUBLIC_IP`])
+#### Connect to EC2 via `ssh`
 
 ```bash
-aws ec2 create-key-pair \
-  --key-name jenkins-server-key \
-  --query 'KeyMaterial' \
-  --output text > jenkins-server-key.pem
-chmod 400 jenkins-server-key.pem
-# Test
-aws ec2 describe-key-pairs --key-names jenkins-server-key
-# OR: in the AWS console visit: EC2 > Key pairs
-
 # connect to EC2:
 ssh -i jenkins-server-key.pem ec2-user@3.125.17.150
 # *** output (example) ***
@@ -167,7 +160,7 @@ Open: http://3.125.17.150:8080/, login with `initial pass`, choose `install plug
 
 ### Github - create repo
 
- **📝 NOTE:**  
+ **NOTE:**  
 - Make sure to update the **S3 bucket** name in the `eks/backend.tf` file  
 - and the **EKS cluster** name in the `eks/locals.tf` file to match the setup.
 
@@ -183,19 +176,19 @@ On http://3.125.17.150:8080/ and create new project:
     - click `Add credentials` and:
       - choose Kind: `Secret text`, 
       - set:
-          - secret: `AKIBJ2XXXXXXXXXX`  (AWS access key id value)
+          - secret: `AKIBJ2XXXXXXXXXX` - my AWS ACCESS KEY ID value
           - as ID: `AWS_ACCESS_KEY_ID`
       - click `Create`
     - click `Add credentials` and:
       - choose Kind: `Secret text`, 
       - set:
-          - secret: `aoKjxxxxxxxxxx`  (AWS secret access key value)
+          - secret: `aoKjxxxxxxxxxx` - my AWS SECRET ACCESS KEY value
           - as ID: `AWS_SECRET_ACCESS_KEY`
       - click `Create`
 
 #### Jenkins pipeline code
 
-Open: `Jenkins > terraform-eks-cicd > Configure` -> `Pipeline` section and put the code into `Script` field (replace `ACCOUNT_NAME` with real `GitHub username`):
+Open: `Jenkins > terraform-eks-cicd > Configure` -> `Pipeline` section and put the code into `Script` field (replace `ACCOUNT_NAME` with your `GitHub username`):
 
 ```text
 pipeline {
