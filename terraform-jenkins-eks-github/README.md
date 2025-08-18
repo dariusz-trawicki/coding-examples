@@ -82,7 +82,14 @@ cd ..
 
 ```bash
 cd jenkins-server
-# In backend.tf file update the s3 bucket name 
+# In backend.tf file update the s3 bucket name
+
+aws ec2 create-key-pair \
+  --key-name jenkins-server-key \
+  --query 'KeyMaterial' \
+  --output text > jenkins-server-key.pem
+chmod 400 jenkins-server-key.pem
+
 terraform init
 terraform plan
 terraform apply
