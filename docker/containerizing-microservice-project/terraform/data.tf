@@ -1,3 +1,6 @@
+# Terraform will fetch the ID of the latest Amazon Linux 2 AMI 
+# available in the region, e.g., ami-0abcdef1234567890
+
 data "aws_ami" "example" {
   most_recent = true
   owners      = ["amazon"]
