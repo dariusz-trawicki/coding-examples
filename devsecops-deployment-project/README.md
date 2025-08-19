@@ -57,7 +57,7 @@ docker run -d -p 3000:3000 --name react-app-example react-app-example
 Open: `http://52.59.138.177:3000`
 
 
-## Step 2: Access Jenkins at port 8080 and install required plugins
+## Step 3: Access Jenkins at port 8080 and install required plugins
 
 Open: `http://52.59.138.177:8080`
 
