@@ -2,11 +2,11 @@ name: Minor release / form vx.y.z to vx.y+1.z
 
 on:
   schedule:
-    - cron: "0 2 * * 1" # Monday: 02:00
-  workflow_dispatch: # manually
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
 
 permissions:
-  contents: write # Ensure the token has write access
+  contents: write
 
 jobs:
   check_changes_job:
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetching the full commit history
+          fetch-depth: 0
 
       - name: Check for changes in the last week (2 minute for last action)
         id: check
@@ -33,7 +33,7 @@ jobs:
 
   minor_release_job:
     name: minor_realease
-    needs: check_changes_job # The job patch_release will be triggered only after the completion of the job check_changes.
+    needs: check_changes_job
     if: needs.check_changes_job.outputs.changes_detected == 'true'
     runs-on: ubuntu-22.04
 

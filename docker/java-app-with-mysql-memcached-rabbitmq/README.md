@@ -57,5 +57,5 @@ Login credentials:
 To stop and remove all containers, networks, and resources created by Compose:
 
 ```bash
- docker compose down
- ```  
+docker compose down
+```
