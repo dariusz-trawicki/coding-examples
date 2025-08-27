@@ -37,7 +37,7 @@ The project is split into two repositories:
 
 ### Terraform workflow (IaC)
 
-Take the code from: [`iac-vprofile-eks`](https://github.com/dariusz-trawicki/)iac-vprofile-eks repository.
+Take the code from: [`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks) repository.
 
 #### Create AWS resources: S3 bucket and ECR
 
