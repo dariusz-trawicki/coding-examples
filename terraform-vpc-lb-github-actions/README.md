@@ -83,7 +83,7 @@ Open: `AWS > EC2 > Load balancers > application-load-balancer`
 
 ---
 
-### 7. Cleaning
+### 7. Cleanup
 
 7.1. In the `deploy.yml` file, uncomment the following code:
 

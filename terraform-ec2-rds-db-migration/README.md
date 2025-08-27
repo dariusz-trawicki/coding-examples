@@ -198,7 +198,7 @@ cat db.sql
 # -- Dump completed on 2025-08-01 14:53:19
 ```
 
-### Cleaning
+### Cleanup
 
 ```bash
 terraform destroy

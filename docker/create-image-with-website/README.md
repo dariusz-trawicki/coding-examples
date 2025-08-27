@@ -108,10 +108,13 @@ docker rm aquawebsite
 docker build -t aqua_img:V3 .
 docker run -d --name aquawebsite -p 9080:80 aqua_img:V3
 docker ps -a
+```
 
-# open in teh browser: localhost:9080
+Open in teh browser: localhost:9080
 
-# Cleaning
+#### Cleanup
+
+```bash
 docker stop aquawebsite
 docker rm aquawebsite
 rm -rf aqua-not-tar

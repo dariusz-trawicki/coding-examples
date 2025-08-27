@@ -264,7 +264,7 @@ e.g.:
 
 Open that DNS address in your browser. You should see the `"Welcome to nginx!"` page.
 
-### Cleaning
+### Cleanup
 
 `Jenkins > terraform-eks-cicd` click `Build with parameters` 
 and choose e.g. `destroy`.

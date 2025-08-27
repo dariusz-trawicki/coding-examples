@@ -24,3 +24,10 @@ terraform apply
 ```
 
 Wait, this process may take a while... Open in the browser: http://18.158.61.1.
+
+
+#### Cleanup
+
+```bash
+terraform destroy
+```

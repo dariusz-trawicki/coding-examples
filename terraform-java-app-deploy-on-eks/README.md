@@ -175,7 +175,7 @@ Add DNS record:
 Visit: `http://vprofile.xxxxx.com`
 
 
-#### Step 4. Cleaning
+#### Step 4. Cleanup
 
 ```bash
 kubectl delete -n ingress-nginx -f \
