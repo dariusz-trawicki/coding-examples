@@ -75,7 +75,7 @@ In AWS console: `IAM > Users > Create user`: Name: `gitops`
 #### Create the secrets:
 
 Go to the repositories ([`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks) and [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions)) on GitHub and 
-- Click on the `Settings` tab. Then, in the left sidebar:
+- Click on the `Settings` tab.
 - Click on `Secrets and variables > Actions`.
 - Click the `New repository secret` button.
 
