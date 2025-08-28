@@ -2,36 +2,34 @@
 
 ### Overview
 
-GitHub Actions runs two workflows:
-1. **Terraform Workflow** – provisions AWS infrastructure.
-2. **Build, Test & Deploy** – builds the app, pushes an image to ECR, and deploys to EKS with Helm.
+**GitHub Actions** runs two workflows:
+1. **Terraform Workflow** – provisions AWS infrastructure (`EKS`).
+2. **Build, Test & Deploy** – builds the app, pushes the Docker image to `ECR`, and deploys to `EKS` with Helm.
 
 The project is split into two repositories:
 
-- Infrastructure as Code (IaC) — Terraform for VPC/EKS/ECR
+- **Infrastructure as Code** (IaC) — Terraform for `VPC/EKS/ECR`:
   - [`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks)
-- Application CI/CD — GitHub Actions to build, test, push to ECR, and deploy to EKS with Helm
+- **Application CI/CD** — **GitHub Actions** to build, test, push to `ECR`, and deploy to `EKS` with `Helm`:
   - [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions)
 
 
 #### Step 1. Terraform workflow (IaC)
 
-- **Stage branch**: the workflow fetches the stage branch and runs terraform plan to test the changes.
-- **Pull request** → **Merge to** main: after approval, merging to main runs terraform apply.
-- **AWS resources**: the workflow manages an **Amazon EKS** cluster inside a **VPC subnet**, plus an **Amazon ECR** repository used by the app pipeline.
+**AWS resources**: the workflow manages an **Amazon EKS** cluster inside a **VPC subnet**.
 
 #### Step 2. Build, test & deploy (application)
 
-- The workflow fetches application code.
+- The `workflow` fetches application code.
 - **Build & test** with **Maven**.
 - **Containerize** with **Docker** and push the image to **Amazon ECR**.
-- **Deploy** to the EKS cluster using **Helm charts** (install/upgrade).
+- **Deploy** to the `EKS cluster` using **Helm charts** (install/upgrade).
 
 ### Result
 
 - Infra changes are validated and applied.
-- Every successful build produces a versioned image in ECR and updates the running workload on EKS via Helm.
-- The stack runs in AWS (EKS + ECR in a VPC), orchestrated entirely from GitHub Actions.
+- Every successful build produces a versioned image in `ECR` and updates the running workload on `EKS` via `Helm`.
+- The stack runs in AWS (`EKS` + `ECR` in a `VPC`), orchestrated entirely from `GitHub Actions`.
 
 ## Run (main steps)
 
