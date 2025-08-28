@@ -4,7 +4,7 @@
 
 **GitHub Actions** runs two workflows:
 1. **Terraform Workflow** – provisions AWS infrastructure (`EKS`).
-2. **Build, Test & Deploy** – builds the app, pushes the Docker image to `ECR`, and deploys to `EKS` with Helm.
+2. **Build, Test & Deploy** – builds the app, pushes the Docker image to `ECR`, and deploys to `EKS` with `Helm`.
 
 The project is split into two repositories:
 
@@ -72,7 +72,7 @@ In AWS console: `IAM > Users > Create user`: Name: `gitops`
 
 #### Create the secrets:
 
-Go to the repositories ([`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks) and [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions)) on GitHub and 
+Go to the repositories ([`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks) and [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions)) on `GitHub` and:
 - Click on the `Settings` tab.
 - Click on `Secrets and variables > Actions`.
 - Click the `New repository secret` button.
