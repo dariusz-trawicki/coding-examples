@@ -56,9 +56,9 @@ terraform apply
 #### Verify SSH (optional)
 
 ```bash
-ssh -i ./test-key ubuntu@52.210.51.41
 #  If needed (if host key changed):
 # ssh-keygen -R 52.210.51.41 
+ssh -i ./test-key ubuntu@52.210.51.41
 cd /
 ls -l
 cd var/www/html
