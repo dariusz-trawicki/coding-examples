@@ -48,14 +48,17 @@ terraform init
 terraform validate
 terraform plan
 terraform apply
-# *** output (example) ***
-# Outputs:
+# Example outputs:
 # WebPrivateIP = "172.31.44.225"
 # WebPublicIP = "52.210.51.41"
+```
 
-# SSH: test connection:
+#### Verify SSH (optional)
+
+```bash
 ssh -i ./test-key ubuntu@52.210.51.41
-# ssh-keygen -R 52.210.51.41  # if needed
+#  If needed (if host key changed):
+# ssh-keygen -R 52.210.51.41 
 cd /
 ls -l
 cd var/www/html
