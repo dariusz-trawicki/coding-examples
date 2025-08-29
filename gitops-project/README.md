@@ -3,7 +3,7 @@
 ### Overview
 
 **GitHub Actions** runs two workflows:
-1. **Terraform Workflow** – provisions AWS infrastructure (`EKS`).
+1. **Terraform Workflow** – provisions AWS infrastructure (`EKS`, `VPC`).
 2. **Build, Test & Deploy** – builds the app, pushes the Docker image to `ECR`, and deploys to `EKS` with `Helm`.
 
 The project is split into two repositories:
@@ -119,7 +119,7 @@ In the [`iac-vprofile-eks`](https://github.com/dariusz-trawicki/iac-vprofile-eks
 - **CI**: **Build** and **push** image to **ECR**
 - **CD**: **Deploy** to **EKS**
 
-In [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions/actions) repository run `vprofile actions` action. The `GitHub Actions` workflow runs the app tests, builds a Docker image, pushes it to `Amazon ECR` and deploy to **EKS**.
+In [`vprofile-actions`](https://github.com/dariusz-trawicki/vprofile-actions/actions) repository run `vprofile actions` action. The `GitHub Actions` workflow runs the app tests, builds a `Docker image`, pushes it to `Amazon ECR` and deploy to **EKS**.
 
 ### Cleanup
 

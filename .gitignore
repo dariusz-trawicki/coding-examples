@@ -9,6 +9,7 @@ crash.log
 *.log
 
 *.pem
+*.pub
 *.key
 *.crt
 *.zip
