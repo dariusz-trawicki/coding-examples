@@ -11,4 +11,4 @@ output "WebPublicIP" {
 output "RDSEndpoint" {
   description = "RDS Endpoint"
   value       = aws_db_instance.wordpress.endpoint
-} 
+}

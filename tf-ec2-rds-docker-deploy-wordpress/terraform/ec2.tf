@@ -20,5 +20,4 @@ resource "aws_instance" "web" {
     rds_dbname   = var.db_name
     # DOCKER_COMPOSE_VERSION = "v2.24.6"
   })
-
 }

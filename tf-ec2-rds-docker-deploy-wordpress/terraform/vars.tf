@@ -90,4 +90,3 @@ variable "db_password" {
   sensitive   = true
   default     = "Admin123$"
 }
-
