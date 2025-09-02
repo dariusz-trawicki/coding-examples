@@ -19,6 +19,8 @@ Open: http://PUBLIC_IP – the Apache welcome page will appear.
 
 ```bash 
 ssh -i ./test-web-server-key.pem ubuntu@PUBLIC_IP
+sudo -i
+fdisk -l
 ```
 
 ### Cleanup
