@@ -54,7 +54,7 @@ terraform apply
 ```
 
 #### Tests
-Wait about 1 min. Open in browser: http://3.65.176.30. You should see the WordPress installation page.
+Wait, this process may take a while... Open in browser: http://3.65.176.30. You should see the WordPress installation page.
 
 To log in to the EC2 instance via SSH:
 
