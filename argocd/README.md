@@ -1,13 +1,21 @@
 # ArgoCD Installation in Minikube with Git-Backed Application State
 
-```bash
-# Install ArgoCD CLI
-brew install argocd
+#### Configure the GitHub repository (`repoURL`) in the `application.yaml` file
 
+```yaml
+source:
+  repoURL: REPO_URL
+  targetRevision: HEAD
+  path: argocd/dev
+```
+
+
+```bash
 minikube start
 minikube status
 
 
+# Apply ArgoCD
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
