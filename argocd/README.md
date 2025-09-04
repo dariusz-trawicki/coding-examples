@@ -9,17 +9,20 @@ source:
   path: argocd/dev
 ```
 
+#### Start Minikube
 
 ```bash
 minikube start
 minikube status
+```
 
+### Install and Configure ArgoCD in Minikube
 
-# Apply ArgoCD
+```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-# Test
+# Check installation:
 kubectl get pods -n argocd
 # wait ...
 # *** output ***
@@ -31,14 +34,20 @@ kubectl get pods -n argocd
 # argocd-redis-656c79549c-thslw                       1/1     Running   0              3m31s
 # argocd-repo-server-856b768fd9-nwxvl                 1/1     Running   0              3m31s
 # argocd-server-99c485944-f55kg                       1/1     Running   0              3m31s
+```
 
+#### Access the ArgoCD UI
 
+Forward port:
+
+```bash
 # Forward port to UI ArgoCD (8080)
 kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
 
+#### Get the default Argo CD "admin" password stored in a Kubernetes secret:
 
-# Get the default Argo CD "admin" password stored in a Kubernetes secret:
-
+```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -n argocd -o yaml
 # apiVersion: v1
 # data:
@@ -65,21 +74,29 @@ echo
 # BL-Z8aO5ZTAZvSQ5
 ```
 
-### Login in:
+### Login to ArgoCD
 
-1. CLI:
+#### Option A: Browser (UI) — recommended, always available
+
+Open: http://localhost:8080
+- Username: admin
+- Password: (the decoded value from the secret above)
+
+#### Option B: CLI (optional)
+
+Install CLI:
 
 ```bash
-argocd login localhost:8080 --username admin --password BL-Z8aO5ZTAZvSQ5 --insecure
+brew install argocd
+```
+
+```bash
+argocd login localhost:8080 --username admin --password YOUR_PASSWORD --insecure
+--insecure
 # *** output ***
 # 'admin:login' logged in successfully
 # Context 'localhost:8080' updated
 ```
-
-2. In the browser (UI)
-
-Open: http://localhost:8080, (username: `admin`, password: `BL-Z8aO5ZTAZvSQ5`).
-
 
 ### Deploy ArgoCD Application Configuration
 
