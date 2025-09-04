@@ -104,11 +104,16 @@ argocd login localhost:8080 --username admin --password YOUR_PASSWORD --insecure
 kubectl apply -f application.yaml
 # *** output ***
 # application.argoproj.io/myapp-argo-application created
+```
 
+Check status:
+
+```bash
+# via kubectl
+kubectl get applications -n argocd
+
+# or (optional) via CLI
 argocd app list
-# *** output ***
-# NAME                           CLUSTER                         NAMESPACE  PROJECT  STATUS  HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                     PATH        TARGET
-# argocd/myapp-argo-application  https://kubernetes.default.svc  myapp      default  Synced  Healthy  Auto-Prune  <none>      https://github.com/dariusz-trawicki/coding-examples.git  argocd/dev  HEAD
 ```
 
 ### View Deployed Application in ArgoCD
