@@ -1,4 +1,3 @@
-# delete_bucket_and_contents.py
 import os
 import boto3
 from botocore.exceptions import ClientError

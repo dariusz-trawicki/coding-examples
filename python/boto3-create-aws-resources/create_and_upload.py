@@ -1,4 +1,3 @@
-# create_and_upload.py
 import os, uuid, boto3
 
 region = os.environ.get("AWS_REGION", "eu-central-1")
