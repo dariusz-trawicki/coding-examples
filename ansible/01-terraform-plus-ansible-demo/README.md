@@ -75,7 +75,6 @@ This demo demonstrates running Ansible **entirely over AWS Systems Manager (SSM)
 - AWS CLI + **Session Manager Plugin** (on macOS: `brew install awscli session-manager-plugin`).
 - macOS/Linux shell.
 
-> Tip: Keep the EC2 in a private subnet; SSM works without SSH or public IP.
 
 ---
 
