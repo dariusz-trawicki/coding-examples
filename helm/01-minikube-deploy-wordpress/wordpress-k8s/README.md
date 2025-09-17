@@ -82,7 +82,7 @@ kubectl get ingress -n wp-ns
 # NOTE:
 minikube ip
 # Output example:
-# 192.168.58.2
+# 192.168.49.2
 
 # Enable the NGINX Ingress Controller addon in Minikube
 minikube addons enable ingress
