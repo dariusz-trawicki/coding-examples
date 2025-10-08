@@ -1,4 +1,4 @@
-### MLFLOW on EC2 AWS Demo (with terraform)
+# MLFLOW on EC2 AWS Demo (with terraform)
 
 Demo project: 
 Train and Log an ElasticNet Wine Quality Model to a Remote MLflow Server.

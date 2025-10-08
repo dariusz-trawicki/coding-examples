@@ -1,5 +1,5 @@
 
-### Demo: installing `MLflow` on `Minikube`
+# Demo: installing `MLflow` on `Minikube`
 
 - `backend database`: `Postgres` (for parameters, metrics etc.)
 - `artifact store`  : `MinIO` (for models, files etc.)

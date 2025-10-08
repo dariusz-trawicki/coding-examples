@@ -1,4 +1,4 @@
-### Runs an `MLflow tracking server` with PostgreSQL and MinIO
+# Runs an `MLflow tracking server` with PostgreSQL and MinIO
 
 Runs an `MLflow tracking server` with:
   - `PostgreSQL` as `metadata backend`
