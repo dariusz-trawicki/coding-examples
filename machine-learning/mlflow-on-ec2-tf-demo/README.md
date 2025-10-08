@@ -45,4 +45,3 @@ python app.py
 python -m ipykernel install --user --name app-312 --display-name "Python 3.12 (app)"
 jupyter notebook app.ipynb
 ```
-
