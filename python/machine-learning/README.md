@@ -1,3 +1,3 @@
 ## Machine learning - kod examples
 
-Open: https://github.com/dariusz-trawicki/ml-cicd-project/tree/main/src
+Open: https://github.com/dariusz-trawicki/coding-examples/tree/main/machine-learning/data-science-project/src
