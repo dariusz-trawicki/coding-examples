@@ -202,7 +202,6 @@ spec:
     spec:
       containers:
         - name: mlflow
-          # jeśli wolisz swój obraz, podmień tutaj
           image: ghcr.io/mlflow/mlflow:latest
           ports:
             - { containerPort: 5000, name: http }
@@ -210,7 +209,7 @@ spec:
             - secretRef: { name: minio-secret }
             - secretRef: { name: postgres-secret }
             - configMapRef: { name: mlflow-config }
-          # Do niektórych tagów potrzeba psycopg2/boto3 – doinstaluj w entrypoint
+          # Some tags require psycopg2/boto3 – install it in entrypoint
           command: ["/bin/sh","-c"]
           args:
             - |
