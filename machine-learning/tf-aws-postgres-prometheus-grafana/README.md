@@ -167,4 +167,7 @@ conda remove -p ./venv --all
 
 cd terraform
 terraform destroy
+
+cd ../monitoring
+docker compose down
 ```
