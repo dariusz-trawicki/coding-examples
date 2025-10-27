@@ -150,11 +150,10 @@ Once all containers are up, open the following URLs in your browser:
 1. Log in to Grafana (`http://localhost:3000`).  
 2. Open the preloaded dashboard: **PostgreSQL Overview**.  
 3. You’ll see real-time metrics such as:
-   - Active connections  
+   - Exporter up  
+   - Connections (total)  
    - Transactions per second (TPS)  
-   - Cache hit ratio  
-   - Table reads/writes  
-   - Rule-triggered fraud decisions  
+   - Rollbacks per second  
 
 NOTE: Dashboard files and provisioning are preconfigured in `grafana/provisioning` and `grafana/dashboards`.
 
