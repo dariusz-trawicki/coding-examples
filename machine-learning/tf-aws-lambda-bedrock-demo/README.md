@@ -4,6 +4,16 @@ This demo deploys an **AWS Lambda function** that generates a short blog post us
 
 ---
 
+## Requirements
+
+- AWS CLI configured (`aws configure`)
+- AWS account with:
+  - Amazon Bedrock access (`meta.llama3-70b-instruct-v1:0`)
+  - Permissions for Lambda, S3, CloudWatch
+- Region: `us-east-1` (Bedrock fully supported)
+
+---
+
 ## Setup
 
 ### 1. Initialize and deploy infrastructure
@@ -100,16 +110,6 @@ Here's a 200-word blog post on edge computing:
 **The Power of Edge Computing: Bringing Data Closer to Home**
 In today's digital age, data is being generated at an unprecedented rate...
 ```
-
----
-
-## Requirements
-
-- AWS CLI configured (`aws configure`)
-- AWS account with:
-  - Amazon Bedrock access (`meta.llama3-70b-instruct-v1:0`)
-  - Permissions for Lambda, S3, CloudWatch
-- Region: `us-east-1` (Bedrock fully supported)
 
 ---
 
