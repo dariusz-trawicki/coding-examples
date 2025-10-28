@@ -4,6 +4,18 @@ This demo deploys an **AWS Lambda function** that generates a short blog post us
 
 ---
 
+## Architecture
+
+```
+Lambda (Python) → Amazon Bedrock → Generated text → S3 bucket
+```
+
+- **Lambda** invokes Bedrock (Llama 3 model) to generate a blog post.  
+- **S3** stores the generated output (`.txt` file).  
+- **Terraform** handles provisioning IAM roles, Lambda, and S3.
+
+---
+
 ## Requirements
 
 - AWS CLI configured (`aws configure`)
@@ -31,18 +43,6 @@ Outputs:
 lambda_function_name = "bedrock-blog-generator"
 s3_bucket_name       = "dartit-bedrock-blog-a3c678e5"
 ```
-
----
-
-## Architecture
-
-```
-Lambda (Python) → Amazon Bedrock → Generated text → S3 bucket
-```
-
-- **Lambda** invokes Bedrock (Llama 3 model) to generate a blog post.  
-- **S3** stores the generated output (`.txt` file).  
-- **Terraform** handles provisioning IAM roles, Lambda, and S3.
 
 ---
 
