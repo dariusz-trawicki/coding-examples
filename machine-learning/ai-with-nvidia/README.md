@@ -95,3 +95,11 @@ Enter Your Question From Documents, for example:
 - This demo uses **free NVIDIA API credits** (several thousand upon signup).  
 - When credits run out, you’ll see an error like `insufficient credits`.  
 - You can request more credits or connect a payment method on [build.nvidia.com](https://build.nvidia.com).
+
+
+## CLEAN UP
+
+```bash
+conda deactivate
+conda remove -p ./venv --all
+```
