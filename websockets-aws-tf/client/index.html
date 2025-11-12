@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WS Demo Client</title>
+    <style>
+      body { font: 16px/1.4 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif; margin: 2rem; }
+      #log { white-space: pre-wrap; background:#f6f6f6; border:1px solid #ddd; padding:1rem; height: 260px; overflow:auto; }
+      input, button { font-size: 16px; }
+    </style>
+  </head>
+  <body>
+    <h1>WebSocket Demo Client</h1>
+    <p>Enter the address below in the format <code>ws://ALB-DNS/ws</code> or <code>wss://</code> if you have a certificate configured.</p>
+    <input id="url" size="60" placeholder="ws://example-alb-123456.eu-central-1.elb.amazonaws.com/ws" />
+    <button id="connect">Connect</button>
+    <button id="send" disabled>Send "ping"</button>
+    <div id="log"></div>
+
+    <script>
+      const url = document.getElementById('url');
+      const log = document.getElementById('log');
+      const connectBtn = document.getElementById('connect');
+      const sendBtn = document.getElementById('send');
+      let ws;
+
+      function print(line) {
+        log.textContent += line + "\n";
+        log.scrollTop = log.scrollHeight;
+      }
+
+      connectBtn.onclick = () => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.close();
+        }
+        ws = new WebSocket(url.value.trim());
+        ws.onopen = () => { print("connected ✅"); sendBtn.disabled = false; };
+        ws.onmessage = (e) => print("recv: " + e.data);
+        ws.onclose = () => { print("closed ❎"); sendBtn.disabled = true; };
+        ws.onerror = (e) => print("error: " + (e.message || e.type));
+      };
+
+      sendBtn.onclick = () => {
+        if (ws && ws.readyState === WebSocket.OPEN) ws.send("ping");
+      };
+    </script>
+  </body>
+</html>
