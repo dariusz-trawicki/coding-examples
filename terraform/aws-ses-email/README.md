@@ -112,13 +112,7 @@ You should see:
 - **Domain status:** Verified
 - **DKIM:** Verified / Successful
 
-Once both are green, you can reliably send email from (example):
-
-```
-dariusz.trawicki@dartit.pl
-```
-
-via Amazon SES (SMTP or API).
+Once both are green, you can reliably send email from (example): `dariusz.trawicki@dartit.pl` via Amazon SES (SMTP or API).
 
 ---
 
