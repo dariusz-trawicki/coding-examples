@@ -50,7 +50,7 @@ Example resource snippets:
 
 ``` hcl
 resource "aws_ses_domain_identity" "dartit" {
-  domain = "dartit.pl"
+  domain = var.domain # "dartit.pl"
 }
 
 resource "aws_ses_domain_dkim" "dartit" {
@@ -71,7 +71,7 @@ resource "aws_sqs_queue" "email_queue" {
 
 ``` hcl
 locals {
-  ses_from_email = "dariusz.trawicki@dartit.pl"
+  ses_from_email = var.sender_address # "dariusz.trawicki@dartit.pl"
 }
 
 resource "aws_lambda_function" "send_email" {
