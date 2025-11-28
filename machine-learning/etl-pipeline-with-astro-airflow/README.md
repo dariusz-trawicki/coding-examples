@@ -135,13 +135,13 @@ https://api.nasa.gov/planetary/apod?api_key=Zc5stujuDjYXXXXXXXXXXXXXXXXXXlIhdb8T
 
 #### PostgreSQL Access Details
 
-**Conn Id:** `my_postgres_connection`
-**Conn Type:** `Postgres`
-**Host:** `localhost`
-**Schema:** `postgres`
-**Login:** `postgres`
-**Password:** `postgres`
-**Port:** `5432`
+- **Conn Id:** `my_postgres_connection`
+- **Conn Type:** `Postgres`
+- **Host:** `localhost`
+- **Schema:** `postgres`
+- **Login:** `postgres`
+- **Password:** `postgres`
+- **Port:** `5432`
 
 ---
 
