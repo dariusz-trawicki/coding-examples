@@ -79,7 +79,7 @@ apache-airflow-providers-postgres
 
 ### Running the Project
 
-SStart Airflow locally:
+Start Airflow locally:
 
 ```bash
 astro dev start
