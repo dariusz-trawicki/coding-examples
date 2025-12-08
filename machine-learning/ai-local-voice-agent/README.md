@@ -29,6 +29,7 @@ brew install ffmpeg
 ### 2. Set up Python environment and install dependencies
 
 ```bash
+# In Terminal I:
 uv venv
 source .venv/bin/activate
 uv sync
@@ -37,11 +38,11 @@ uv sync
 ### 4. Download required models in Ollama
 
 ```bash
-# 1. In Terminal I:
+# 1. In Terminal II:
 ollama serve
 
 
-# 2. In Terminal II:
+# 2. In Terminal I:
 ollama pull gemma3:4b    # pull the model
 ollama list              # list the pulled models
 ```
@@ -52,7 +53,8 @@ ollama list              # list the pulled models
 
 #### Web UI (default)
 ```bash
-# In Terminal II:
+# In Terminal I:
+
 python voice_chat.py
 # Output:
 # INFO:     Warming up STT model.
@@ -70,7 +72,7 @@ Open http://127.0.0.1:7860, then click `Record` and start speaking.
 #### Phone Number Interface
 Get a temporary phone number that anyone can call to interact with your AI:
 ```bash
-# In Terminal II:
+# In Terminal I:
 # STOP voice_chat.py (ctr+c)
 python voice_chat.py --phone
 # Example Output:
