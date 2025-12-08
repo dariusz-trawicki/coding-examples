@@ -15,7 +15,7 @@ logger.add(sys.stderr, level="DEBUG")
 def echo(audio):
     # STT:
     transcript = stt_model.stt(audio)
-    logger.debug(f"🎤 Transcript: {transcript}")
+    logger.debug(f"Transcript: {transcript}")
     # Calling local LLM via ollama.chat:
     response = chat(
         model="gemma3:4b",
@@ -29,7 +29,7 @@ def echo(audio):
         options={"num_predict": 200},
     )
     response_text = response["message"]["content"]
-    logger.debug(f"🤖 Response: {response_text}")
+    logger.debug(f"Response: {response_text}")
     for audio_chunk in tts_model.stream_tts_sync(response_text):
         yield audio_chunk
 
