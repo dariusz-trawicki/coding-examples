@@ -39,9 +39,12 @@ uv sync
 
 ```bash
 # 1. In Terminal II:
-ollama serve
+ollama serve  # keep this terminal open
+```
 
+### 5. Pull the model
 
+```bash
 # 2. In Terminal I:
 ollama pull gemma3:4b    # pull the model
 ollama list              # list the pulled models
