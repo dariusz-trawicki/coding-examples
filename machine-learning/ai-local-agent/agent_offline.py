@@ -48,7 +48,7 @@ You can:
 
 When the user asks:
 - "how many words" / "count words" → use the count_words tool,
-- "reverse this" / "odwróć tekst" → use the reverse_text tool,
+- "reverse this" / "reverse_text" → use the reverse_text tool,
 Otherwise, answer normally in a helpful and conversational way.
 Always explain briefly what you did when you used a tool.
 """
