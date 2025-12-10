@@ -93,7 +93,7 @@ ollama pull qwen3:4b-instruct-2507-q4_K_M
 3. Run the agent (terminal II):
 
 ```bash
-uv venv
+uv sync
 uv run agent_offline.py
 ```
 

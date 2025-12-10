@@ -30,8 +30,6 @@ brew install ffmpeg
 
 ```bash
 # In Terminal I:
-uv venv
-source .venv/bin/activate
 uv sync
 ```
 
