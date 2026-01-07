@@ -13,8 +13,8 @@ with DAG(
     catchup=False
 
 ) as dag:
-    
-    ## Step 1: Create the table if it doesnt exists
+
+    ## Step 1: Create the table if it doesn't exist
     @task
     def create_table():
         
