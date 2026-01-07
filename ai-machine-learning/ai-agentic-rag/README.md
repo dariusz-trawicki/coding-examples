@@ -2,8 +2,8 @@
 
 This demo contains two complementary examples of Retrieval-Augmented Generation (RAG):
 
-1. **Classic RAG pipeline**: PDF ingestion → chunking → embeddings → vector database (ChromaDB) → retrieval → LLM answer generation (Groq via LangChain).
-2. **Agentic RAG**: A simple stateful workflow built with **LangGraph**, where an agent decides whether retrieval is needed, optionally retrieves from a vector store (FAISS), and then generates an answer using an LLM (OpenAI via LangChain).
+1. **Classic RAG pipeline**: `PDF` ingestion → chunking → embeddings → vector database (ChromaDB) → retrieval → LLM answer generation (Groq via LangChain).
+2. **Agentic RAG**: A simple stateful workflow built with **LangGraph**, where an agent decides whether retrieval is needed, optionally retrieves from a vector store (FAISS), and then generates an answer using an LLM (OpenAI via `LangChain`).
 
 The goal is to demonstrate both:
 - a straightforward, production-style RAG pipeline, and
