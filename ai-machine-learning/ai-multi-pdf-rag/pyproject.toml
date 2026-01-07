@@ -1,7 +1,7 @@
 [project]
-name = "01-multipdf-ai-assistant"
+name = "multipdf-ai-assistant"
 version = "0.1.0"
-description = "Add your description here"
+description = "PDF RAG Assistant (LangChain + Streamlit)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
