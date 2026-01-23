@@ -12,7 +12,7 @@ permissions:
 env:
   APP_NAME: ml-app
   IMAGE_TAG: latest
-  TAG_KEY: app       # ec2.tf: app = var.app_name   # <─ TAG_KEY=app, TAG_VALUE=ml-app
+  TAG_KEY: app
   TAG_VALUE: ml-app
 
 jobs:

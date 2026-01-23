@@ -100,7 +100,7 @@ pip install "ansible==10.*" "boto3==1.34.162" "botocore==1.34.162"
 ansible-galaxy collection install --force --upgrade amazon.aws community.aws
 ```
 
-Check you’re using the **virtualenv’s** binaries (important if you also have Homebrew Ansible):
+Check the **virtualenv’s** binaries (important if we also have Homebrew Ansible):
 
 ```bash
 ansible --version
