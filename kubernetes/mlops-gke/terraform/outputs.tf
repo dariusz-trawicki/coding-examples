@@ -1,5 +1,5 @@
 output "project_id" {
-  description = "ID projektu GCP"
+  description = "Project ID"
   value       = module.project.project_id
 }
 
@@ -8,7 +8,7 @@ output "github_actions_sa_email" {
 }
 
 output "artifact_registry_url" {
-  description = "URL do Artifact Registry"
+  description = "URL to Artifact Registry"
   value       = "${var.region}-docker.pkg.dev/${module.project.project_id}/${google_artifact_registry_repository.docker_repo.repository_id}"
 }
 
