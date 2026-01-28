@@ -5,6 +5,8 @@ This example demonstrates how to use SciPy for optimization tasks in Python. It 
 ## Run
 
 ```bash
-uv add scipy numpy matplotlib
-uv run optimization_example.py
+uv venv
+uv sync
+
+uv run python optimization_example.py
 ```
