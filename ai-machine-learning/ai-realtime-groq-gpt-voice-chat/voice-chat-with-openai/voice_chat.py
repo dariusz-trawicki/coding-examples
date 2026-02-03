@@ -30,6 +30,10 @@ from elevenlabs import VoiceSettings
 # ============================================================
 load_dotenv()
 
+# Ensure espeak-ng data path for espeakng-loader
+if not os.environ.get("ESPEAK_DATA_PATH"):
+    os.environ["ESPEAK_DATA_PATH"] = "/opt/homebrew/share/espeak-ng-data"
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 if not OPENAI_API_KEY:
     raise RuntimeError("Missing OPENAI_API_KEY in env/.env")

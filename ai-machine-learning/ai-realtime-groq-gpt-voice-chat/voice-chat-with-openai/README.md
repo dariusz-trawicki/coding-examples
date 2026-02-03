@@ -79,12 +79,14 @@ FastRTC provides:
 - Environment variables / `.env` file with API keys:
   - `OPENAI_API_KEY` (required)
   - `ELEVENLABS_API_KEY` (optional but required for Polish voice)
+  - `ESPEAK_DATA_PATH` (path to espeak-ng-data)
 
 ---
 
 ## Installation
 
 ```bash
+brew install espeak-ng
 uv venv
 source .venv/bin/activate
 uv sync

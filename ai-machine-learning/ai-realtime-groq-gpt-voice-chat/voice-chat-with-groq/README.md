@@ -87,6 +87,7 @@ FastRTC provides:
 ## Installation
 
 ```bash
+brew install espeak-ng
 uv venv
 source .venv/bin/activate
 uv sync
@@ -100,6 +101,7 @@ Create a `.env` in the project root:
 
 ```ini
 GROQ_API_KEY=your_groq_key_here
+ESPEAK_DATA_PATH=path_to_espeak-ng-data
 
 # Optional but required for Polish TTS
 ELEVENLABS_API_KEY=your_elevenlabs_key_here
