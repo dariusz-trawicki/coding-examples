@@ -51,7 +51,9 @@ uv sync
 ```
 
 ### 2. Configure environment variables
-Create a .env file:
+
+Create a `.env` file:
+
 ```env
 OPENAI_API_KEY=your_api_key_here
 ```
