@@ -12,7 +12,7 @@ import mlflow
 import mlflow.sklearn
 from mlflow.models.signature import infer_signature
 
-# --- Konfiguracja ---
+# --- Configuration ---
 MLFLOW_SERVER_URI = "http://ec2-3-121-219-175.eu-central-1.compute.amazonaws.com:5000/"
 DATA_URL = "https://raw.githubusercontent.com/mlflow/mlflow/master/tests/datasets/winequality-red.csv"
 EXPERIMENT_NAME = "Wine-Quality"
@@ -29,28 +29,28 @@ def eval_metrics(actual, pred):
 
 
 if __name__ == "__main__":
-    # Ustaw zdalny tracking (i registry — dla przejrzystości w 3.x to ten sam URI)
+    # Set remote tracking (and registry — for clarity in 3.x it's the same URI)
     mlflow.set_tracking_uri(MLFLOW_SERVER_URI)
     mlflow.set_registry_uri(MLFLOW_SERVER_URI)
     mlflow.set_experiment(EXPERIMENT_NAME)
 
-    # Dane
+    # Data
     try:
         data = pd.read_csv(DATA_URL, sep=";")
     except Exception:
         logger.exception("Unable to download the data")
         sys.exit(1)
 
-    # Reprodykowalny podział
+    # Reproducible split
     train, test = train_test_split(data, test_size=0.25, random_state=42)
 
     train_x = train.drop(columns=["quality"])
     test_x = test.drop(columns=["quality"])
-    # y jako Series (1D), żeby uniknąć ostrzeżeń sklearn
+    # y as Series (1D) to avoid sklearn warnings
     train_y = train["quality"]
     test_y = test["quality"]
 
-    # Parametry z CLI (domyślnie 0.5/0.5)
+    # Parameters from CLI (default 0.5/0.5)
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
     l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
 
@@ -69,25 +69,25 @@ if __name__ == "__main__":
         print(f"  MAE:  {mae}")
         print(f"  R2:   {r2}")
 
-        # Logi MLflow
+        # MLflow logs
         mlflow.log_params({"alpha": alpha, "l1_ratio": l1_ratio})
         mlflow.log_metrics({"rmse": rmse, "mae": mae, "r2": r2})
 
-        # Signature + input_example, żeby nie było warningów
+        # Signature + input_example to avoid warnings
         signature = infer_signature(train_x, lr.predict(train_x))
         input_example = train_x.iloc[:5]
 
         if tracking_scheme != "file":
-            # Zdalny tracking: log + rejestracja w Model Registry
+            # Remote tracking: log + registration in Model Registry
             mlflow.sklearn.log_model(
                 sk_model=lr,
-                name="model",  # zamiast artifact_path
+                name="model",  # instead of artifact_path
                 signature=signature,
                 input_example=input_example,
                 registered_model_name="ElasticnetWineModel",
             )
         else:
-            # Lokalny tracking: tylko log modelu
+            # Local tracking: only log model
             mlflow.sklearn.log_model(
                 sk_model=lr,
                 name="model",
@@ -95,8 +95,8 @@ if __name__ == "__main__":
                 input_example=input_example,
             )
 
-        # Przydatne linki do UI
+        # Useful UI links
         run = mlflow.active_run()
         base = MLFLOW_SERVER_URI.rstrip("/")
-        print(f"🏃 View run at: {base}/#/experiments/{run.info.experiment_id}/runs/{run.info.run_id}")
-        print(f"🧪 View experiment at: {base}/#/experiments/{run.info.experiment_id}")
+        print(f"View run at: {base}/#/experiments/{run.info.experiment_id}/runs/{run.info.run_id}")
+        print(f"View experiment at: {base}/#/experiments/{run.info.experiment_id}")
