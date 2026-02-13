@@ -1,4 +1,4 @@
-# PDF Question Answering with NVIDIA Embeddings and Llama 3 (70B)
+# RAG: PDF Question Answering with NVIDIA Embeddings and Llama 3 (70B)
 
 This demo showcases how to use **NVIDIA AI Endpoints** with **LangChain** and **Streamlit**
 to build a simple **question-answering application** powered by **vector search** and **Large Language Models (LLMs)**.

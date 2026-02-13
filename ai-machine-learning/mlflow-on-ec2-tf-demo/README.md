@@ -8,9 +8,6 @@ Train and Log an ElasticNet Wine Quality Model to a Remote MLflow Server.
 ```bash
 # create key-pair
 cd terraform
-aws ec2 create-key-pair --key-name mlflow-key --query 'KeyMaterial' --output text > mlflow-key.pem
-chmod 400 mlflow-key.pem
-
 terraform init
 terraform apply
 # Output example:
