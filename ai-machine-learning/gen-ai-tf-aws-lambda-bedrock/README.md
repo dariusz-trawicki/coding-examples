@@ -1,4 +1,4 @@
-# AWS Bedrock Blog Generator Demo
+# Generative AI: AWS Bedrock Blog Generator Demo
 
 This demo deploys an **AWS Lambda function** that generates a short blog post using **Amazon Bedrock (Meta Llama 3)** and saves the result to an **S3 bucket**.
 
