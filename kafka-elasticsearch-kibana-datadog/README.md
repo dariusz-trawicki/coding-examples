@@ -1,6 +1,6 @@
-# Kafka → Elasticsearch → Kibana
+# Kafka → Elasticsearch → Kibana and DataDog
 
-Real-time payment processing pipeline using Kafka, Kafka Connect, Elasticsearch, and Kibana.
+Real-time payment processing pipeline using Kafka, Kafka Connect, Elasticsearch, Kibana abd DataDog.
 
 ```
 producer.py → Kafka (payments) → Kafka Connect → Elasticsearch → Kibana
