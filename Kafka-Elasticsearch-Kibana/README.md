@@ -155,6 +155,7 @@ curl http://localhost:9200/payments/_search?pretty
 
 ---
 
+
 ## Useful Commands
 
 ```bash
