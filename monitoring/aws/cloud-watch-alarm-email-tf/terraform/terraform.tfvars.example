@@ -1,0 +1,7 @@
+aws_region         = "eu-west-1"
+project_name       = "cpu-alarm-demo"
+instance_type      = "t2.micro"
+public_key_path    = "~/.ssh/your-key.pub"
+alert_email        = "xxx@email.com" 
+cpu_threshold      = 80
+evaluation_periods = 2
