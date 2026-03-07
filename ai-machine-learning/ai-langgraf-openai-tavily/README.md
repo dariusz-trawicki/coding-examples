@@ -32,10 +32,11 @@ START
 
 ```
 .
-├── main.py        # agent logic
-├── .env           # API keys (not committed)
-├── .gitignore
-└── pyproject.toml # managed by uv
+├── main.py            # agent logic
+├── .env.example       # API keys template (copy to .env)
+├── .python-version    # Python version for uv
+├── pyproject.toml     # managed by uv
+└── uv.lock            # locked dependencies
 ```
 
 ## Setup
