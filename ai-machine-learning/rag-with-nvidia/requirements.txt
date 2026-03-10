@@ -1,8 +1,10 @@
-openai
-python-dotenv
-
-langchain_nvidia_ai_endpoints
-langchain_community
-faiss-cpu
 streamlit
+python-dotenv
+langchain
+langchain-core
+langchain-community
+langchain-nvidia-ai-endpoints
+langchain-text-splitters
+faiss-cpu
 pypdf
+openai
