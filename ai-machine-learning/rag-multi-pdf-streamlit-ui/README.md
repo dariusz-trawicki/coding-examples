@@ -51,9 +51,7 @@ uv sync
 ```
 
 ### 2. Configure environment variables
-
-Create a `.env` file:
-
+Create a .env file:
 ```env
 OPENAI_API_KEY=your_api_key_here
 ```
@@ -74,10 +72,8 @@ http://localhost:8501
 
 ## Example Questions
 
-- What is the title of the document?
-- Quote one sentence from the document.
-- Give me a short excerpt from the document.
-- What is this document used for?
+- What is the title of the raport?
+- Invoice no.?
 
 ---
 
