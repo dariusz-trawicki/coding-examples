@@ -6,7 +6,7 @@ A fine-tuned **DistilBERT** model for multi-class classification of news article
 
 ## Overview
 
-This project fine-tunes a pre-trained DistilBERT model on the [AG News dataset](https://huggingface.co/datasets/ag_news) to classify news articles into one of four categories:
+This project fine-tunes a pre-trained DistilBERT model on the AG News dataset](https://huggingface.co/datasets/sh0416/ag_news) to classify news articles into one of four categories:
 
 | Label | Category |
 |-------|----------|
@@ -152,7 +152,7 @@ Opens a Gradio interface at [http://127.0.0.1:7860](http://127.0.0.1:7860).
 | Accuracy | ~87%  |
 | F1 score | ~87%  |
 
-> Results may vary slightly depending on hardware and random seed. AG News is harder than binary sentiment classification — some categories overlap (e.g. Business vs World for economic/political news).
+> Results may vary slightly depending on hardware and random seed. AG News is harder than for example `binary sentiment classification` — some categories overlap (e.g. Business vs World for economic/political news).
 
 ---
 
