@@ -6,7 +6,7 @@ A fine-tuned **DistilBERT** model for multi-class classification of news article
 
 ## Overview
 
-This project fine-tunes a pre-trained DistilBERT model on the AG News dataset](https://huggingface.co/datasets/sh0416/ag_news) to classify news articles into one of four categories:
+This project fine-tunes a pre-trained DistilBERT model on the [AG News dataset](https://huggingface.co/datasets/sh0416/ag_news) to classify news articles into one of four categories:
 
 | Label | Category |
 |-------|----------|
