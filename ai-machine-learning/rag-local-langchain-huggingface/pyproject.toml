@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     # Web UI
-    "gradio>=6.11.0",
     "streamlit>=1.56.0",
 
     # LLM + RAG
