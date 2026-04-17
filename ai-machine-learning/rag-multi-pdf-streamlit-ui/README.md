@@ -1,6 +1,6 @@
 # PDF RAG Assistant (LangChain + Streamlit)
 
-A lightweight Retrieval-Augmented Generation (RAG) application that allows users to chat with their own PDF documents using OpenAI models.
+A lightweight `Retrieval-Augmented Generation` (RAG) application that allows users to chat with their own PDF documents using OpenAI models.
 
 This project demonstrates how to build a clean, production-style RAG pipeline with document ingestion, vector search, conversational memory, and a simple Streamlit UI.
 
