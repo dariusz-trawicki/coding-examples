@@ -14,7 +14,7 @@ Fine-tune a small language model on your own data using QLoRA on a free GPU — 
 
 ## Quick Start
 
-1. Open [`smollm2_finetuning_colab.ipynb`](./smollm2_finetuning_colab.ipynb) in Google Colab
+1. Open `smollm2_finetuning_colab.ipynb` in Google Colab
 2. Set runtime: `Runtime → Change runtime type → T4 GPU`
 3. Edit your training data in **Cell 4**
 4. Run all cells in order
