@@ -2,7 +2,7 @@
 
 Minimalny pipeline Retrieval-Augmented Generation (RAG) oparty na **PLLuM** — polskim otwartym modelu językowym — uruchamiany na GPU T4 (Kaggle).
 
-## Co robi
+## Proces
 
 Na podstawie zestawu polskojęzycznych dokumentów pipeline odpowiada na pytania w języku naturalnym, wyszukując najbardziej trafne fragmenty i generując ugruntowaną, cytowaną odpowiedź po polsku.
 
@@ -31,7 +31,7 @@ Jeśli odpowiedź nie zostanie znaleziona w dostarczonych dokumentach, model jaw
 | Embeddingi | `intfloat/multilingual-e5-base` |
 | Baza wektorowa | FAISS (lokalna) |
 | Ładowanie dokumentów | LangChain + PyPDF |
-| Środowisko uruchomieniowe | T4 15 GB (Kaggle) |
+| Środowisko uruchomieniowe | Kaggle: GPU T4 x 2 |
 
 ---
 
@@ -47,10 +47,10 @@ PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim
 
 ## Szybki start
 
-### Kaggle (zalecane — 30 h/tydzień darmowego GPU)
+### Kaggle
 
 1. Przejdź na kaggle.com → **New Notebook**
-2. Ustawienia → Accelerator → **GPU T4 x2**
+2. Settings → Accelerator → **GPU T4 x2**
 3. Wgraj `pllum_rag_pl.ipynb`
 4. **Run All**
 
@@ -68,27 +68,7 @@ PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim
 | 6 | Funkcja pipeline `rag_query()` |
 | 7 | Trzy testy + tryb interaktywny |
 | 8 | Diagnostyka (VRAM, wyniki wyszukiwania) |
-| 9 | Zapis modelu lokalnie (unikanie ponownego pobierania) |
 
----
-
-## Używanie własnych dokumentów
-
-Zastąp listę `raw_documents` w komórce 3 własną treścią:
-
-```python
-# Opcja A: zwykły tekst
-raw_documents = [
-    "Twój pierwszy dokument...",
-    "Twój drugi dokument...",
-]
-
-# Opcja B: wczytaj z PDF
-from langchain_community.document_loaders import PyPDFLoader
-loader = PyPDFLoader("/kaggle/input/moj-dataset/dokument.pdf")
-pages = loader.load()
-raw_documents = [p.page_content for p in pages]
-```
 
 ---
 
@@ -100,8 +80,6 @@ raw_documents = [p.page_content for p in pages]
 | PLLuM 8B (4-bit) | ~6–7 GB |
 | Inferencja (kontekst 4096 tokenów) | ~1–2 GB |
 | **Łącznie** | **~9 GB** |
-
-Mieści się komfortowo w 15 GB karty T4. Pozostałe ~6 GB jest dostępne dla większych dokumentów i dłuższych kontekstów.
 
 ---
 
