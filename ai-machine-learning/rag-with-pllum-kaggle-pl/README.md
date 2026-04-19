@@ -37,7 +37,7 @@ Jeśli odpowiedź nie zostanie znaleziona w dostarczonych dokumentach, model jaw
 
 ## O PLLuM
 
-PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim i innych językach słowiańskich/bałtyckich, opracowana przez [konsorcjum HIVE AI](https://pllum.org.pl) oraz Ministerstwo Cyfryzacji.
+PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim, opracowana przez [konsorcjum HIVE AI](https://pllum.org.pl) oraz Ministerstwo Cyfryzacji.
 
 `Llama-PLLuM-8B-chat` bazuje na **Llama 3.1-8B**, opublikowanym na licencji **Llama 3.1** (otwarta, dozwolony użytek komercyjny), i był dalej pretrenowany na ~30 miliardach tokenów polskiego tekstu.
 
@@ -51,7 +51,8 @@ PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim
 
 1. Przejdź na kaggle.com → **New Notebook**
 2. Settings → Accelerator → **GPU T4 x2**
-3. Wgraj `pllum_rag_pl.ipynb`
+3. Wgrywamy `pllum_rag_pl.ipynb`
+  - `File > Import Notebook`
 4. **Run All**
 
 ---
