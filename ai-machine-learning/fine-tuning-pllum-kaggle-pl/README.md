@@ -28,12 +28,12 @@ PLLuM to rodzina dużych modeli językowych wyspecjalizowanych w języku polskim
 
 `Llama-PLLuM-8B-chat` bazuje na **Llama 3.1-8B**, opublikowanym na licencji **Llama 3.1** (otwarta, dozwolony użytek komercyjny), i był dalej pretrenowany na ~30 miliardach tokenów polskiego tekstu.
 
-### Kluczowa różnica od innych modeli Llama 3.1
+### Szablon
 
-PLLuM używa **szablonu czatu Llama 3** — nie ChatML. To kluczowe przy fine-tuningu:
+`Llama-PLLuM-8B-chat` używa **szablonu czatu Llama 3**:
 
 ```
-# PLLuM / Llama 3 (poprawnie):
+# PLLuM / Llama 3:
 <|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
 {system}<|eot_id|><|start_header_id|>user<|end_header_id|>
