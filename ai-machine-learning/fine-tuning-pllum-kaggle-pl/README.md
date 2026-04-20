@@ -1,6 +1,6 @@
 # Fine-tuning Llama-PLLuM-8B-chat — QLoRA
 
-Minimalny pipeline fine-tuningu QLoRA dla **PLLuM** — polskiego otwartego modelu językowego — uruchamiany na GPU T4 (Kaggle).
+Minimalny pipeline fine-tuningu QLoRA dla **PLLuM** (`Llama-PLLuM-8B-chat`) — polskiego otwartego modelu językowego — uruchamiany na GPU T4 (Kaggle).
 
 ## Proces
 
