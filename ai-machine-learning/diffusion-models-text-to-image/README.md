@@ -18,7 +18,6 @@ Prompt: `a cat sitting on a beach at sunset, photorealistic`
 ## Usage
 
 ```bash
-uv sync
 uv run main.py
 ```
 

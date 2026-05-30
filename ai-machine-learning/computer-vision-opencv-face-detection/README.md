@@ -25,8 +25,6 @@ opencv-face-detection/
 ## Installation
 
 ```bash
-uv sync
-
 mkdir -p model
 
 wget -P model https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt
