@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-# Wczytaj model DNN (SSD + ResNet)
+# Load model DNN (SSD + ResNet)
 net = cv2.dnn.readNetFromCaffe(
     "model/deploy.prototxt",
     "model/res10_300x300_ssd_iter_140000.caffemodel"
@@ -18,7 +18,7 @@ detections = net.forward()
 
 for i in range(detections.shape[2]):
     confidence = detections[0, 0, i, 2]
-    if confidence > 0.5:          # próg pewności
+    if confidence > 0.5:
         box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
         x1, y1, x2, y2 = box.astype(int)
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
