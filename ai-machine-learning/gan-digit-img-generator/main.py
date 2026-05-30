@@ -1,17 +1,3 @@
-"""
-GAN Demo — MNIST Handwritten Digits
-Trains a simple GAN from scratch and shows generated images live.
-
-Architecture:
-  Generator:     noise (100,) → Dense → LeakyReLU → ... → (28, 28, 1)
-  Discriminator: (28, 28, 1) → Dense → LeakyReLU → ... → real/fake score
-
-Usage:
-  uv run main.py                  # train + show window
-  uv run main.py --epochs 50      # more epochs
-  uv run main.py --load            # load saved weights and generate only
-"""
-
 import argparse
 import os
 import sys
