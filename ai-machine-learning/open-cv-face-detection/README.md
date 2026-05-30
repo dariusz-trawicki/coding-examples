@@ -25,7 +25,7 @@ Two approaches are included: classic Haar Cascade and DNN-based detection.
 ## Installation
 
 ```bash
-uv add opencv-python
+uv sync
 
 mkdir -p model
 
