@@ -6,7 +6,7 @@ Two approaches are included: classic Haar Cascade and DNN-based detection.
 ## Project Structure
 
 ```
-02-opencv-demo/
+opencv-face-detection/
 ├── model/
 │   ├── deploy.prototxt
 │   └── res10_300x300_ssd_iter_140000.caffemodel
