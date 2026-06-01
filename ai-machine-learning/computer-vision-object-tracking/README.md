@@ -47,11 +47,6 @@ Frame → Tracker.update(frame) → bounding box (x, y, w, h) + success flag
 on parts of the object that are reliably distinguishable from the background.  
 It updates its internal model every frame — no re-detection step needed.
 
-### Why tracking ≠ detection
-- **Detection**: runs a full neural net every frame — slow, finds new objects
-- **Tracking**: updates a lightweight model from previous frame — fast, follows known objects
-- In practice: combine both (e.g. YOLO every N frames + tracker in between)
-
 ## Requirements
 
 - Python 3.10+
