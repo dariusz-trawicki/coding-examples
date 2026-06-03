@@ -36,11 +36,11 @@ video (.mp4) → keypoints extraction → tensor (N, 90, 225) → 1D CNN → sig
 ## Feature vector (225 float32 per frame)
 
 ```
-pose   33 × (x, y, z) =  99
-left   21 × (x, y, z) =  63
-right  21 × (x, y, z) =  63
+pose        33 × (x, y, z) =  99
+left hand   21 × (x, y, z) =  63
+right hand  21 × (x, y, z) =  63
 ──────────────────────────────
-total                    225
+total                         225
 ```
 
 Coordinates normalized to [0, 1] relative to frame. Missing landmarks = zeros.
