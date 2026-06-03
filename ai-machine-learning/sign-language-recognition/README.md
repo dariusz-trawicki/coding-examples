@@ -18,9 +18,9 @@ video (.mp4) → keypoints extraction → tensor (N, 90, 225) → 1D CNN → sig
 ```
 .
 ├── data/videos/                  # source videos
-│   ├── 01-czesc.mp4
-│   ├── 02-dzien-dobry.mp4
-│   └── 03-dobry-wieczor.mp4
+│   ├── 01_czesc.mp4
+│   ├── 02_dzien_dobry.mp4
+│   └── 03_dobry_wieczor.mp4
 ├── keypoints/                   # extracted data
 │   ├── dataset.npy              # tensor (N, 90, 225)
 │   ├── dataset_aug.npy          # augmented tensor (33, 90, 225)
@@ -110,9 +110,9 @@ Linear(64→num_classes)
 
 | Video | Frames | Left hand | Right hand |
 |---|---|---|---|
-| 01-czesc | 75 | 4% | 46% |
-| 02-dzien-dobry | 150 | 56% | 34% |
-| 03-dobry-wieczor | 100 | 71% | 35% |
+| 01_czesc | 75 | 4% | 46% |
+| 02_dzien_dobry | 150 | 56% | 34% |
+| 03_dobry_wieczor | 100 | 71% | 35% |
 
 Training accuracy: 1.00 (3 classes, memorization expected at this dataset size).
 
