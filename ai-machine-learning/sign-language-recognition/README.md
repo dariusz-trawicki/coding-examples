@@ -121,7 +121,6 @@ Training accuracy: 1.00 (3 classes, memorization expected at this dataset size).
 - 3 classes only — not enough for real generalization
 - Single recording per class — no true train/val split possible
 - Augmented validation is not independent from training data
-- Low left hand detection on some recordings (low resolution source video)
 
 
 ## Environment
