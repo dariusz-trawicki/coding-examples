@@ -143,9 +143,6 @@ Polish Sign Language (Polski Język Migowy) is an autonomous visual-spatial
 language, not a signed version of Polish. It has its own grammar, spatial
 syntax, and simultaneous morphology with no written form.
 
-This tool is intended as a communication aid in the absence of a human
-interpreter — not as a replacement for one.
-
 ## Data
 
 Source videos are from YouTube:
