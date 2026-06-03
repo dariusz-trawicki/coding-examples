@@ -123,12 +123,6 @@ Training accuracy: 1.00 (3 classes, memorization expected at this dataset size).
 - Augmented validation is not independent from training data
 - Low left hand detection on some recordings (low resolution source video)
 
-## Next steps
-
-- [ ] Expand corpus — minimum 10 recordings per sign, 20+ signs
-- [ ] True train/val split on independent recordings
-- [ ] Normalize keypoints relative to torso (position-invariant features)
-- [ ] Test higher resolution source video for better hand detection
 
 ## Environment
 
