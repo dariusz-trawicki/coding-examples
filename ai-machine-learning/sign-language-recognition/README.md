@@ -1,4 +1,4 @@
-# Sign Language Translator — Demo
+# Sign Language Recognition — Demo
 
 Polish Sign Language (PJM) recognition proof-of-concept.
 
