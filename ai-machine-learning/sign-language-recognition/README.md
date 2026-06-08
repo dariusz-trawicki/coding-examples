@@ -52,7 +52,18 @@ right  21 × (x, y, z) =  63
 total                    225
 ```
 
-Coordinates normalized to [0, 1] relative to frame. Missing landmarks = zeros.
+Each frame of video is converted into a flat array of 225 numbers:
+
+- `Pose` — 33 body landmarks (shoulders, elbows, hips, etc.) × 3 coordinates (x, y, z) = 99 values
+- `Left hand` — 21 hand landmarks × 3 = 63 values
+- `Right hand` — 21 hand landmarks × 3 = 63 values
+
+All detected by `MediaPipe`. Coordinates are normalized — x=0.0 is the left edge of the frame, x=1.0 is the right edge, same for y. This makes the vector independent of video resolution.
+
+If a hand is not visible in a frame (e.g. only one hand used in the gesture), those 63 values are filled with zeros.
+
+One gesture recording = 90 frames × 225 floats.
+
 
 ## Setup
 
