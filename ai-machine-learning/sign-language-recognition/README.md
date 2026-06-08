@@ -161,7 +161,7 @@ Or open in browser:
 open "https://ml.azure.com/runs/<job-name>?wsid=/subscriptions/b81de34a-705b-4253-a664-6bed9ca398bb/resourcegroups/rg-pjm-ml/workspaces/pjm-workspace-6"
 ```
 
-Navigate to: **Default Directory → pjm-workspace-6 → Zadania → sign-language-recognition → pjm-cnn-train**
+Navigate to: **Default Directory → pjm-workspace-6 → Jobs → sign-language-recognition → pjm-cnn-train**
 
 Wait for status **Running**, then check the **Metrics** tab for training results.
 
