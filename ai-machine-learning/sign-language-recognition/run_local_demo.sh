@@ -14,7 +14,7 @@ uv run extract_keypoints.py --input data/videos/ --output keypoints/ --visualize
 echo ""
 echo "[2/2] Augmenting data and training model..."
 uv run augment.py
-uv run train_classifierg_local.py
+uv run train_classifier_local.py
 
 echo ""
 echo "=== Demo complete ==="
