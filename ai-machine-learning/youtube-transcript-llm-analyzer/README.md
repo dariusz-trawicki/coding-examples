@@ -113,6 +113,24 @@ Result saved to `analysis/<name>.json`:
 }
 ```
 
+
+### Lecture notes generator
+- Pipeline:
+```
+Download audio → transcribe (Whisper) → generate lecture notes (Claude) → save as *.md
+```
+
+```bash
+# Single video:
+uv run transcribe_to_lecture.py https://youtube.com/...
+
+# Local MP3 file
+uv run transcribe_to_lecture.py nagranie.mp3 pl
+
+# Batch (multiple videos) - add URLs to `film-urls.txt`
+uv run transcribe_to_lecture.py
+```
+
 ## Notes
 
 - Whisper runs with `fp16=False` (Apple Silicon compatibility)
