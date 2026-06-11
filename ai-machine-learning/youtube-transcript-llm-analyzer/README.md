@@ -125,7 +125,7 @@ Download audio → transcribe (Whisper) → generate lecture notes (Claude) → 
 uv run transcribe_to_lecture.py https://youtube.com/...
 
 # Local MP3 file
-uv run transcribe_to_lecture.py audio.mp3 pl
+uv run transcribe_to_lecture.py audio.mp3
 
 # Batch (multiple videos) - add URLs to `film-urls.txt`
 uv run transcribe_to_lecture.py
