@@ -1,7 +1,6 @@
 # GAN Demo — MNIST Handwritten Digits
 
-Trains a **Generative Adversarial Network** from scratch on MNIST.  
-A live window updates every epoch — watch the Generator learn to fool the Discriminator.
+Example of a **Generative Adversarial Network** (GAN) demonstration – a network that learns to generate handwritten digits (0-9) from the MNIST dataset (60,000 grayscale digit images, 28x28 pixels).
 
 ## Quick Start
 
