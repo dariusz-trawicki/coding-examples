@@ -29,19 +29,19 @@ a continuous stream.
 ## Architecture
 
 ```
-[producer]  --topic vibration-raw-->  [feature-consumer]  --topic vibration-features--> [serving-api]
-    |                                        |                                                |
-    | (synthetic vibration signal)           v                                                v
-    |                              Postgres: feature_store.features              topic "predictions"
-    |                                        |                                   Postgres: predictions
-    |                                        v
-    |                              [Airflow DAG: ct_bearing_pipeline]
-    |                                build_dataset -> check_drift -> (retrain) -> validate_and_promote
-    |                                        |
-    |                                        v
-    |                              [MLflow: tracking + model registry]
-    |                                        |
-    +----------------------------------------+--> serving-api loads models:/<name>@champion
+[producer] -- topic "vibration-raw" -->  [feature-consumer]  --topic "vibration-feature"s--> [serving-api]
+                                                |                                                |
+                                                v                                                v
+                                      Postgres: feature_store.features              topic "predictions"
+                                                |                                   Postgres: predictions
+                                                v
+                                      [Airflow DAG: ct_bearing_pipeline]
+                                        build_dataset -> check_drift -> (retrain) -> validate_and_promote
+                                                |
+                                                v
+                                      [MLflow: tracking + model registry]
+                                                |
+                                                +--> serving-api loads models:/<name>@champion
 ```
 
 | Layer | Component | Responsibility |
