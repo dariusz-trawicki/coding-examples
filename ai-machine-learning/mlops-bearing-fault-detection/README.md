@@ -26,6 +26,54 @@ tracks every experiment and manages which model version is "live," and a
 `FastAPI` serving layer exposes real-time predictions — both on demand and as
 a continuous stream.
 
+## Tech stack
+
+### Infrastructure / orchestration
+| Tool | Version / image | Role |
+|---|---|---|
+| Docker Compose | v2 | wires together all 10 services, startup dependencies, healthchecks |
+
+### Streaming
+| Tool | Version | Role |
+|---|---|---|
+| Apache Kafka | `apache/kafka:latest` | message bus: `vibration-raw`, `vibration-features`, `predictions` |
+| kafka-python | 2.0.2 | Kafka client used by `producer`, `feature-consumer`, `feature-store-writer`, `serving-api` |
+
+### Database
+| Tool | Version | Role |
+|---|---|---|
+| PostgreSQL | 16 (`postgres:16-alpine`) | single instance, 3 databases: `feature_store`, `mlflow`, `airflow` |
+
+
+### MLOps: tracking + orchestration
+| Tool | Version | Role |
+|---|---|---|
+| MLflow | 2.14.1 | experiment tracking + Model Registry (`champion`/`challenger` aliases) |
+| Apache Airflow | 2.9.3 (Python 3.11) | orchestrates the `ct_bearing_pipeline` Continuous Training DAG, `LocalExecutor` |
+
+
+### Machine learning / data processing
+| Tool | Version | Role |
+|---|---|---|
+| scikit-learn | 1.5.0 | `IsolationForest` (anomaly detection) + `RandomForestClassifier` (fault type) |
+| pandas | 2.2.2 | DataFrames for the training dataset and model inputs |
+| NumPy | 1.26.4 | signal operations, synthetic data generator |
+| SciPy | 1.13.0 | `scipy.stats` (kurtosis, skewness, KS test), `scipy.signal` (Hilbert transform, Welch's method) |
+| joblib | 1.4.2 | scikit-learn/MLflow model serialization dependency |
+
+### Serving (API)
+| Tool | Version | Role |
+|---|---|---|
+| FastAPI | 0.111.0 | REST API (`/predict`, `/health`, `/reload-model`) |
+| Uvicorn | 0.30.1 | ASGI server running FastAPI |
+| requests | 2.32.3 | HTTP call from Airflow to `serving-api` (`notify_serving`) |
+
+### Languages & base images
+- **Python 3.11** — common baseline across all custom services (`python:3.11-slim` or `apache/airflow:...-python3.11`)
+- **Bash** — database initialization script (`postgres/init-multiple-dbs.sh`)
+- **SQL** (Postgres DDL/DML) — `features` / `predictions` table schemas
+
+
 ## Architecture
 
 ```
@@ -84,8 +132,7 @@ a continuous stream.
 ## Requirements
 
 - Docker + Docker Compose v2 (`docker compose version`)
-- ~4 GB of free RAM for all containers (Kafka + Postgres + MLflow + 
-  Airflow are the heaviest)
+- ~4 GB of free RAM for all containers (Kafka + Postgres + MLflow + Airflow)
 - Free host ports: `5432` (Postgres), `29092` (Kafka — host access only;
   internally services connect via `kafka:9092`), `5000` (MLflow), `8080`
   (Airflow UI), `8000` (Serving API)
@@ -166,16 +213,16 @@ test on the next DAG run and trigger a retrain.
 
 ```
 .
-├── docker-compose.yml            # includes init-shared-data (volume permission fix)
+├── docker-compose.yml
 ├── .env
-├── postgres/init-multiple-dbs.sh # creates: mlflow, airflow, feature_store databases
-├── shared/                       # shared logic (used by producer + feature-consumer)
-│   ├── bearing_physics.py        # BPFO/BPFI/BSF/FTF formulas
-│   ├── data_generator.py         # signal generator (5 classes: normal/outer/inner/ball/cage)
-│   └── feature_extraction.py     # 16 features: time/frequency/envelope-spectrum
-├── producer/                     # Kafka producer (simulated on-line sensor)
+├── postgres/init-multiple-dbs.sh  # creates: mlflow, airflow, feature_store databases
+├── shared/                        # shared logic (used by producer + feature-consumer)
+│   ├── bearing_physics.py         # BPFO/BPFI/BSF/FTF formulas
+│   ├── data_generator.py          # signal generator (5 classes: normal/outer/inner/ball/cage)
+│   └── feature_extraction.py      # 16 features: time/frequency/envelope-spectrum
+├── producer/                      # Kafka producer (simulated on-line sensor)
 ├── feature_consumer/              # Kafka consumer -> feature extraction -> feature store
-├── serving/                      # FastAPI: anomaly->classification cascade + streaming inference
+├── serving/                       # FastAPI: anomaly->classification cascade + streaming inference
 ├── mlflow/Dockerfile              # MLflow server (backend: Postgres, artifacts: volume)
 └── airflow/
     ├── Dockerfile                 # Airflow + ML/MLflow dependencies
@@ -185,27 +232,24 @@ test on the next DAG run and trigger a retrain.
         └── common/                # config.py, dataset.py, drift.py, train.py, promote.py
 ```
 
-## Known simplifications
+## Simplifications
 
-- The feature store is a single Postgres table, not a dedicated engine
-  (Feast) — sufficient to demonstrate a single source of truth for
+- The `feature store` is a single `Postgres` table, not a dedicated engine
+  (Feast) — sufficient to demonstrate a single `source of truth` for
   online/offline features.
 - Airflow runs with `LocalExecutor` on a single host — scaling out would
   require `CeleryExecutor`/`KubernetesExecutor`.
-- No TLS/auth between services (Kafka is PLAINTEXT, MLflow has no auth,
-  passwords are plaintext in `.env`) — add before any real production
+- No `TLS/auth` between services (Kafka is PLAINTEXT, MLflow has no auth,
+  passwords are plaintext in `.env`) — must be added before any real production
   deployment.
 - Fault labels are available instantly via simulation
   (`sim_fault_label`) — in a real system this is where a human-in-the-loop
   process / delayed label from a service inspection would go.
-- Data is 100% synthetic — for validation against real-world data, the
-  public CWRU Bearing Data Center dataset is recommended.
-- Airflow `schedule_interval` is 15 minutes for demo purposes — production
-  systems would more typically use `@daily` or an event-driven trigger.
+- Data is 100% synthetic.
 
 ## Stopping / cleaning up
 
 ```bash
-docker compose down            # stops containers, keeps volumes (data)
-docker compose down -v         # + removes volumes (clean slate)
+docker compose down            # OR:
+docker compose down -v         # removes volumes (clean slate)
 ```
