@@ -247,9 +247,8 @@ test on the next DAG run and trigger a retrain.
   process / delayed label from a service inspection would go.
 - Data is 100% synthetic.
 
-## Stopping / cleaning up
+## Cleaning up
 
 ```bash
-docker compose down            # OR:
-docker compose down -v         # removes volumes (clean slate)
+docker compose down -v
 ```
