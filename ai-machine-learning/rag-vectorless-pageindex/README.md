@@ -28,7 +28,7 @@ pageindex-demo/
 ├── .env
 ├── data/
 │   └── sample_document.pdf
-└── pageindex_claude_haiku_en.ipynb
+└── pageindex_vectorless_rag.ipynb
 ```
 
 ## Setup
@@ -61,7 +61,7 @@ Place the notebook in the project root, and the sample PDF inside a `data/` subf
 ```bash
 mkdir data
 # copy sample_document.pdf into ./data/
-# copy pageindex_claude_haiku.ipynb into the project root
+# copy pageindex_vectorless_rag.ipynb into the project root
 ```
 
 ### 5. Create your `.env` file
