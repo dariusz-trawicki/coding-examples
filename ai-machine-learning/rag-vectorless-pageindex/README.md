@@ -91,26 +91,6 @@ PDF_PATH = "./data/sample_document.pdf"
 
 Confirm the kernel selected in the top-right of JupyterLab points to this project's `.venv`, then run the cells in order (Shift+Enter).
 
-> The first cell (`!pip install ...`) can be skipped — dependencies are already installed via `uv add`.
-
-## Quick sanity check
-
-If anything seems off, run this in a notebook cell before proceeding:
-
-```python
-import sys, os
-print(sys.executable)                 # should point inside pageindex-demo/.venv
-print(os.path.exists("./data/sample_document.pdf"))   # should print True
-```
-
-## Troubleshooting
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'pageindex'` | Jupyter isn't running inside the project's `.venv` | Relaunch with `uv run jupyter lab` |
-| `PageIndex key loaded: ❌` | Missing/misnamed `.env` | Confirm `.env` is in the project root and uses the exact key name `PAGEINDEX_API_KEY` |
-| `FileNotFoundError` on the PDF | Wrong relative path | Confirm the PDF is at `./data/sample_document.pdf` relative to where the notebook is running |
-| `json.decoder.JSONDecodeError` when parsing Claude's response | Model wrapped the JSON in ` ```json ` fences | Already handled in `llm_tree_search()` — it strips code fences before parsing |
 
 ## What's in the notebook
 
