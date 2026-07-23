@@ -19,15 +19,6 @@ from .config import FEATURE_STORE_DSN, FEATURE_COLUMNS, DATASET_SNAPSHOT_PATH
 
 def load_feature_dataset(since_hours: int | None = None, require_labels: bool = True) -> pd.DataFrame:
     """Reads features from the feature store. `since_hours=None` = full history.
-
-    Note: we deliberately do NOT use `pd.read_sql(query, sqlalchemy_engine)`
-    here. In this image (Airflow + MLflow + several other packages
-    installed together) SQLAlchemy versions can drift apart enough that
-    pandas fails to recognize the engine as "connectable" and tries to call
-    `.cursor()` directly on the Engine/Connection object (AttributeError). A
-    manual psycopg2 cursor + `DataFrame(rows, columns=...)` is completely
-    independent of that detection logic and of the SQLAlchemy version
-    altogether.
     """
     where_clause = ""
     if since_hours is not None:
