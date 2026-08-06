@@ -1,7 +1,13 @@
+"""A tiny calculator — the sandbox subject for the workflow demo."""
+
+
 def add(a, b):
+    """Return the sum of a and b."""
     return a + b
 
+
 def subtract(a, b):
+    """Return a minus b."""
     return a - b
 
 

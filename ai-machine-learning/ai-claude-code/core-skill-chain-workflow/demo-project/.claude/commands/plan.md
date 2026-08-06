@@ -1,64 +1,77 @@
 ---
-description: "Creates an implementation plan (plan.md + plan-brief.md) in an interactive dialogue"
-argument-hint: "[change name]"
-allowed-tools: ["Read", "Write", "Grep", "Glob"]
+description: Creates an implementation plan through a Socratic dialogue
+argument-hint: [change-slug]
+allowed-tools: Read, Write, Edit, Grep, Glob
 ---
 
 # Plan — Preparation
 
-Stage: **Plan preparation**. Here the agent takes on a Socratic role — not
-just planning, but **challenging and asking questions**.
+Stage: **Plan preparation**. Your role here is Socratic: not just planning,
+but challenging assumptions and surfacing trade-offs.
 
 ## Arguments
-Change name: `$ARGUMENTS`
+
+Change slug: `$1`
+
+If no slug was passed, list the directories under `context/` and ask which
+change to plan.
 
 ## Your task
 
-1. **Load `change.md` and `research.md`** from `context/$ARGUMENTS/`.
-   If `research.md` doesn't exist, stop and ask the user to run
-   `/research $ARGUMENTS` first.
+1. **Load `context/$1/change.md` and `context/$1/research.md`.**
+   If `research.md` is missing, check whether the project has any source code
+   to research — look for source files outside `.claude/`, `context/`, and
+   `archive/`. If there is source code, stop and point the user to
+   `/research $1`. If there is none — a greenfield project — say so in the
+   chat, note in `plan.md` under `## Context` that planning proceeded without
+   a research artifact, and continue.
 
-2. **Assess the complexity of the change** (low / medium / high) based on:
-   - the number of affected modules/layers,
-   - risks listed in `research.md`,
-   - whether the change touches public API / contracts / production data.
+2. **Rate the complexity** — low / medium / high — based on:
+   - number of affected modules and layers,
+   - risks recorded in `research.md`,
+   - whether public API, data contracts, or production data are touched.
 
-3. **Ask questions matched to the complexity**, directly in the chat, and
-   **wait for the user's reply before writing plan.md**:
-   - **Low complexity** → 3-5 questions, mostly confirming direction.
-   - **Medium/High complexity** → more questions, including trade-offs
-     between specific implementation options (present options with their
-     pros/cons, let the user choose).
+   State your rating and your reasoning in one sentence before asking
+   anything. The rating drives both the number of questions and the size of
+   the plan.
 
-   Example question categories:
-   - Choice of technical approach (if there is more than one sensible option).
-   - Ordering of phases — what can safely be shipped separately.
-   - Testing strategy (unit / integration / e2e / manual steps).
-   - Handling of edge cases identified in research.md.
+3. **Ask questions matched to that rating**, in the chat, then **end your
+   turn and wait for the reply before writing any file**:
+   - **Low** → 2-4 questions, mostly confirming direction.
+   - **Medium / high** → more, including explicit choices between
+     implementation options. Present each option with its pros and cons and
+     let the user pick; do not pick silently.
 
-   **Don't ask questions just for the sake of asking.** If the answer is
-   obvious from `change.md`/`research.md`, don't ask again.
+   Useful categories: technical approach, phase ordering and what can ship
+   separately, testing strategy, handling of the edge cases named in
+   `research.md`.
 
-4. **Write `plan.md`** (detailed, for the agent, roughly 150-300 lines):
+   Do not re-ask anything already answered in `change.md` or `research.md`.
+
+4. **Write `context/$1/plan.md`** — detailed, written for the agent to
+   execute. Length follows the complexity rating from step 2: roughly 40-80
+   lines for low, 80-200 for medium, 200-350 for high. Never pad a simple
+   change to hit a line count.
 
    ```markdown
-   # Plan: <Change name>
+   # Plan: <change name>
 
    ## Context
-   <1 paragraph — reference to change.md and research.md, without repeating
-   their content>
+   <one paragraph; reference change.md and research.md, do not repeat them>
+
+   ## Complexity: <low | medium | high>
 
    ## Phase 1: <name>
-   ### Phase goal
+   ### Goal
    ...
    ### Steps
    1. ...
    2. ...
-   ### Files to change
+   ### Files touched
    - `path/...`
-   ### Phase verification
-   - [ ] tests: ...
-   - [ ] manual verification: ...
+   ### Verification
+   - [ ] tests: <exact command>
+   - [ ] manual check: ...
 
    ## Phase 2: <name>
    (same structure)
@@ -67,39 +80,42 @@ Change name: `$ARGUMENTS`
    - ...
 
    ## Definition of Done
-   - [ ] all acceptance criteria from change.md are met
-   - [ ] tests pass
+   - [ ] every acceptance criterion in change.md is met
+   - [ ] the test command from CLAUDE.md passes
    - [ ] no regression in <specific areas>
    ```
 
-5. **Write `plan-brief.md`** (concise, for the human, <100 lines):
+5. **Write `context/$1/plan-brief.md`** — under 100 lines, written for the
+   human:
 
    ```markdown
-   # Plan (brief): <Change name>
+   # Plan (brief): <change name>
 
    ## What we're doing
    <2-3 sentences>
 
    ## Phases
-   1. <phase name — 1 sentence>
-   2. <phase name — 1 sentence>
+   1. <name — one sentence>
+   2. <name — one sentence>
 
-   ## Key decisions made during planning
-   - <decision> — why
+   ## Decisions made while planning
+   - <decision> — why, and what we rejected
 
-   ## What to watch for during review
+   ## What to watch during review
    - <the riskiest part>
    ```
 
-6. Update the `## Status` section in `change.md` → `Stage: PLANNED`.
+6. **Update `context/$1/change.md`** → `Stage: PLANNED`.
 
-7. Finish with:
-   > Plan ready (`plan.md` + `plan-brief.md`). Review `plan-brief.md` before
-   > starting. Next step: `/implement $ARGUMENTS`
+7. Finish with exactly:
+
+   > Plan ready (Stage: PLANNED). Read `context/$1/plan-brief.md` before
+   > starting. Next step: `/implement $1`
 
 ## Rules
-- The level of user engagement should be proportional to actual complexity —
-  don't overwhelm a simple change with questions.
-- `plan.md` and `plan-brief.md` have two different audiences: agent vs.
-  human. Don't copy content 1:1 between them.
-- Don't start implementation at this stage, even if the plan seems obvious.
+
+- User engagement is proportional to real complexity. Do not drown a
+  two-function change in questions.
+- `plan.md` and `plan-brief.md` serve different audiences. Do not copy
+  content between them verbatim.
+- Do not write implementation code here, however obvious it looks.

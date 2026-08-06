@@ -1,59 +1,88 @@
 ---
-description: "Implements the change phase by phase according to plan.md"
-argument-hint: "[change name] [optional: phase number]"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
+description: Implements the change phase by phase, or applies fixes from review
+argument-hint: [change-slug] [phase-number | fixes]
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash(uv run:*), Bash(uv sync:*), Bash(git status:*), Bash(git diff:*)
+disable-model-invocation: true
 ---
 
 # Implement — Implementation
 
-Stage: **Implementation**. The developer stays in control — the agent
-doesn't do everything at once.
+Stage: **Implementation**. The developer stays in control; you do not do
+everything at once.
 
 ## Arguments
-`$ARGUMENTS` — change name, optionally followed by a specific phase number
-(e.g. `lazy-load-search 2` = implement only Phase 2).
+
+- `$1` — change slug (required).
+- `$2` — optional. Either a phase number (`/implement my-change 2`) or the
+  literal word `fixes`. If `$2` is empty or still contains the literal text
+  `$2`, no second argument was passed.
+
+If `$1` is missing, list the directories under `context/` and ask which
+change to implement.
 
 ## Your task
 
-1. **Load `context/<change>/plan.md`**. If it doesn't exist — stop and
-   point to `/plan`.
+1. **Load `context/$1/plan.md`.** If it does not exist, stop and point to
+   `/plan $1`. Also read `CLAUDE.md` for the project's test command and
+   conventions.
 
-2. **Determine which phase you're implementing.**
-   - If a phase number was given — implement only that one.
-   - If not — ask (directly in the chat) whether to implement all phases in
-     a row, or stop after each one for approval.
+2. **Decide what you are implementing:**
 
-3. **For each phase:**
-   a. Implement the steps described in `plan.md` for this phase, following
-      the project's conventions (`CLAUDE.md`, existing code style in
-      neighboring files).
-   b. Run the tests/linters appropriate for the changed files (check
-      `package.json`/`Makefile`/CI config to use the right commands).
-   c. Verify the "Phase verification" checklist from `plan.md`.
-   d. If something during implementation **deviates from the plan** (e.g.
-      the plan turned out to be off once it met the real code) —
-      **stop and ask the user** instead of quietly improvising.
-   e. Save a short phase summary to `context/<change>/implementation-log.md`
-      (append, don't overwrite):
+   - **`$2` is `fixes`** → fix mode. Read `context/$1/review.md`, take only
+     the issues the user agreed to fix, and treat them as a single extra
+     phase. Skip to step 3 with that list as your steps.
+   - **`$2` is a number** → implement that phase only.
+   - **`$2` is empty, and `context/$1/review.md` exists with verdict
+     `NEEDS FIXES`** → ask whether the user wants fix mode or a re-run of a
+     plan phase. Do not assume.
+   - **`$2` is empty, no review yet** → ask, in the chat, whether to run all
+     phases straight through or stop after each one for approval. Wait for
+     the answer.
+
+3. **For each phase (or the fix set):**
+
+   a. Implement the steps from `plan.md`, following `CLAUDE.md` and the
+      style of neighboring code.
+
+   b. Run the project's test and lint commands as documented in
+      `CLAUDE.md`. If `CLAUDE.md` does not name them, ask — do not guess a
+      command.
+
+   c. Work through the phase's `### Verification` checklist in `plan.md`.
+
+   d. If reality deviates from the plan — the plan assumed something that
+      does not hold once it meets the real code — **stop and ask**. Do not
+      improvise quietly.
+
+   e. Append to `context/$1/implementation-log.md` (append, never
+      overwrite):
+
       ```markdown
-      ## Phase <N> — <date/time>
+      ## Phase <N | fixes round N> — <YYYY-MM-DD HH:MM>
       - Implemented: ...
-      - Tests: <result>
-      - Deviations from plan: <if any>
+      - Files touched: `path/...`, `path/...`
+      - Tests: <command> → <result>
+      - Deviations from plan: <none | what and why>
       ```
-   f. If in "stop after each phase" mode — end your turn and wait for
-      approval before moving on.
 
-4. Once the last phase is implemented, update the `## Status` section in
-   `change.md` → `Stage: IMPLEMENTED`.
+   f. In "stop after each phase" mode, end your turn here and wait for
+      approval.
 
-5. Finish with:
-   > Implementation complete (or: Phase N complete). Manual verification
-   > steps: <list, if any>. Next step: `/review $ARGUMENTS`
+4. **When the last phase is done**, update `context/$1/change.md` →
+   `Stage: IMPLEMENTED`. In fix mode, set it back to `Stage: IMPLEMENTED`
+   as well, so `/review` runs again.
+
+5. Finish with exactly one of:
+
+   > Phase <N> complete. Manual checks: <list, or "none">. Run
+   > `/implement $1 <N+1>` to continue.
+
+   > Implementation complete (Stage: IMPLEMENTED). Manual checks: <list, or
+   > "none">. Next step: `/review $1`
 
 ## Rules
-- Don't go beyond the scope defined in `plan.md` without asking — this is
-  the most common cause of "spaghetti commits" and messy reviews.
-- Small, reviewable steps > one giant commit.
-- If the project's test infrastructure isn't obvious — ask instead of
-  guessing the command.
+
+- Do not go beyond the scope in `plan.md` without asking. Scope creep here
+  is what makes reviews unreadable later.
+- Small, reviewable steps beat one large change.
+- Never mark a phase done while its tests fail.

@@ -1,47 +1,55 @@
 ---
-description: "Builds a mental map of the change based on the repository (research.md)"
-argument-hint: "[change name]"
-allowed-tools: ["Read", "Grep", "Glob", "Bash", "Task"]
+description: Builds a map of how the affected part of the system works today
+argument-hint: [change-slug]
+allowed-tools: Read, Write, Edit, Grep, Glob, Task
 ---
 
 # Research — Problem Assessment
 
-Stage: **Problem assessment**. Goal: a deep understanding of the system
-before a single line of plan or code is written.
+Stage: **Problem assessment**. Goal: understand the system before a single
+line of plan or code exists.
 
 ## Arguments
-Change name: `$ARGUMENTS`
+
+Change slug: `$1`
+
+If no slug was passed, list the directories under `context/` and ask which
+change to research. Do not proceed on a guess.
 
 ## Your task
 
 1. **Load context**
-   - Read `context/$ARGUMENTS/change.md`. If it doesn't exist — stop and
-     tell the user to run `/new $ARGUMENTS` first.
-   - Read `CLAUDE.md` and other convention files (`.editorconfig`,
-     `README.md`, existing ADRs, if any).
+   - Read `context/$1/change.md`. If it does not exist, stop and tell the
+     user to run `/new $1` first.
+   - Read `CLAUDE.md` and any other convention sources present
+     (`README.md`, `.editorconfig`, ADRs).
 
-2. **Break the research into sub-problems and delegate to sub-agents**
-   If the scope of the change touches more than one area (e.g. frontend +
-   backend + storage + CI), use the `Task` tool to spin up **separate
-   sub-agents** for each area, e.g.:
-   - sub-agent A: "Investigate how X currently works in `src/...`, return a
-     concise report (max 1 page): key files, data flow, extension points."
-   - sub-agent B: "Investigate how Y is tested, what the existing testing
-     conventions are."
+2. **Split the research and delegate**
 
-   Each sub-agent gets its **own context window** and returns a short
-   report — don't flood the main context with raw grep/read output.
+   If the change touches more than one area (e.g. frontend + backend +
+   storage + CI), use the `Task` tool to run **one sub-agent per area**, at
+   most four. Each gets its own context window and returns a report of one
+   page or less, for example:
 
-3. **Build `research.md`** using this template:
+   - "Investigate how X works today in `src/...`. Return: key files, data
+     flow, extension points. Max one page."
+   - "Investigate how Y is tested and what the existing test conventions
+     are. Max one page."
+
+   If the change is confined to a single small area — as in this demo
+   project — skip delegation and read the files directly. Spinning up
+   sub-agents for a 10-line file wastes more context than it saves.
+
+3. **Write `context/$1/research.md`**:
 
    ```markdown
-   # Research: <Change name>
+   # Research: <change name>
 
    ## How it works today
-   <description of the current behavior/architecture, with references to
-   files: `path/to/file.ts:42`>
+   <current behavior and structure, with file references like
+   `path/to/file.py:42`>
 
-   ## Why the current behavior exists
+   ## Why it works that way
    <root cause — historical decision, technical constraint, tech debt>
 
    ## Key files and modules
@@ -49,27 +57,25 @@ Change name: `$ARGUMENTS`
    - `path/...` — role in the system
 
    ## Risks and pitfalls
-   - <what could easily break, hidden dependencies, missing tests in this area>
+   - <what breaks easily, hidden dependencies, untested areas>
 
-   ## Open questions for the planning phase
-   - <questions the research did not conclusively answer>
+   ## Open questions for planning
+   - <what research could not settle>
 
-   ## Recommended direction (optional)
-   <if an obvious direction emerges during research — note it, but don't
-   decide for the user>
+   ## Possible directions (optional)
+   <if an obvious direction emerged — record it, but do not decide for the
+   user>
    ```
 
-4. **Save the file** as `context/$ARGUMENTS/research.md`.
+4. **Update `context/$1/change.md`** → `Stage: RESEARCHED`.
 
-5. Update the `## Status` section in `change.md` → `Stage: RESEARCH DONE`.
+5. Finish with exactly:
 
-6. Finish with:
-   > Research complete. Next step: `/plan $ARGUMENTS`
+   > Research complete (Stage: RESEARCHED). Next step: `/plan $1`
 
 ## Rules
-- Don't propose a specific implementation plan yet — that's the `plan`
-  skill's job. Research should ANSWER "how is it now and why", not
-  "what do we do next".
-- Cite specific file paths and lines, not generalities.
-- If the repo is large, always delegate to sub-agents instead of reading
-  everything sequentially in the main thread.
+
+- Answer "how is it now, and why" — not "what should we do". Proposing an
+  implementation plan is `/plan`'s job.
+- Cite concrete paths and line numbers, not generalities.
+- Never dump raw grep or file output into the main thread; summarize.

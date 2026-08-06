@@ -1,54 +1,68 @@
 ---
-description: "Closes the change — moves artifacts to archive/, cleans up context"
-argument-hint: "[change name]"
-allowed-tools: ["Read", "Bash", "Write"]
+description: Closes the change — moves its artifacts to archive/ and clears context/
+argument-hint: [change-slug]
+allowed-tools: Read, Write, Edit, Glob, Bash(mkdir:*), Bash(mv:*), Bash(ls:*), Bash(test:*), Bash(date:*)
+disable-model-invocation: true
 ---
 
 # Archive — Cleanup
 
-Stage: **Cleanup**. The last step of the chain — keeping `context/` tidy
-and building a searchable knowledge history of the project.
+Stage: **Cleanup**. The last link in the chain: keep `context/` small and
+turn finished work into searchable history.
 
 ## Arguments
-Change name: `$ARGUMENTS`
+
+Change slug: `$1`
+
+If no slug was passed, list the directories under `context/` and ask which
+change to archive.
 
 ## Your task
 
-1. **Check the status** in `context/$ARGUMENTS/change.md`. If the status is
-   not `REVIEWED` (verdict READY), warn the user and ask for confirmation
-   that they still want to archive (e.g. a change deliberately abandoned).
+1. **Check the stage** in `context/$1/change.md`. If it is not
+   `REVIEWED-READY`, warn the user, say what the current stage is, and ask
+   for explicit confirmation before continuing — archiving an abandoned
+   change is legitimate, archiving an unfinished one by accident is not.
 
-2. **Build a final summary of the change** — add a section at the top of
-   `change.md`:
+2. **Append a final summary** to the end of `change.md`:
 
    ```markdown
    ## Final summary
-   - Archived: <date>
-   - Final review verdict: <READY / abandoned>
-   - Key takeaways / lessons: <if there's anything worth remembering for
-     the future>
+   - Archived: <YYYY-MM-DD>
+   - Final verdict: <READY | abandoned>
+   - Outcome: <what actually shipped, in 1-2 sentences>
+   - Lessons: <anything worth remembering next time, or "none">
    ```
 
-3. **Move the entire change folder**:
+3. **Move the folder, without clobbering anything:**
+
    ```bash
    mkdir -p archive
-   mv context/$ARGUMENTS archive/$ARGUMENTS-$(date +%Y%m%d)
+   dest="archive/$1-$(date +%Y%m%d)"
+   if [ -e "$dest" ]; then dest="$dest-$(date +%H%M)"; fi
+   mv "context/$1" "$dest"
    ```
 
-4. **If recurring problems came up while working on the change** (linter
-   errors, broken conventions, misunderstandings about the stack) —
-   propose adding a short note to `CLAUDE.md` or a dedicated
-   `context/LESSONS.md` file (if the project uses one), so future agent
-   sessions don't repeat the same mistake. Ask the user for permission
-   before editing `CLAUDE.md`.
+   The guard matters: a bare `mv` onto an existing directory moves the
+   folder *inside* it instead of failing, which silently nests archives.
+   Report the final path to the user.
 
-5. Confirm to the user:
-   > Change `$ARGUMENTS` archived in `archive/`. The `context/` directory
-   > now contains only changes in progress.
+4. **Offer to record a lesson.** If recurring problems came up during the
+   work — lint failures, broken conventions, wrong assumptions about the
+   stack — propose a short note for `CLAUDE.md` (or `context/LESSONS.md` if
+   the project uses one). Show the exact text you would add and **ask for
+   permission before editing anything**.
+
+5. Confirm with exactly:
+
+   > Change `$1` archived at `<final path>`. `context/` now holds only
+   > active work.
 
 ## Rules
-- `context/` should always contain only active changes — this is a
-  deliberate constraint so the context passed to the agent in future
-  sessions doesn't grow indefinitely.
-- `archive/` is not a trash bin — it's a searchable history of decisions.
-  Don't delete files from it without an explicit request from the user.
+
+- `context/` holds active changes only. This is a deliberate constraint:
+  it keeps the context future sessions must load from growing without
+  bound.
+- `archive/` is history, not a trash can. Never delete from it without an
+  explicit request.
+- Never edit `CLAUDE.md` without permission.

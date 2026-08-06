@@ -1,85 +1,113 @@
 ---
-description: "Verifies the implementation against plan.md — scope compliance, not just code correctness"
-argument-hint: "[change name]"
-allowed-tools: ["Read", "Grep", "Glob", "Bash"]
+description: Verifies the implementation against plan.md — scope compliance first
+argument-hint: [change-slug]
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(uv run:*)
 ---
 
 # Review — Quality Assessment
 
-Stage: **Quality assessment**. This is NOT a generic code review — it's a
-verification of **compliance between the implementation and the plan**,
-plus overall quality.
+Stage: **Quality assessment**. This is not a generic code review. It is a
+check that what was built matches what was planned, plus quality and test
+adequacy.
 
-> 💡 Tip: if possible, run this step with a different model than the one
-> that wrote the code (e.g. if Sonnet wrote the code, have a different
-> model do the review). Different models catch each other's mistakes more
-> effectively than the same model reviewing itself.
+> Run this step with a different model than the one that wrote the code
+> where you can — `/model` switches the session before you run this. A
+> model reviewing its own output shares its own blind spots. If you want
+> that enforced rather than remembered, add a `model:` line to this file's
+> frontmatter; it applies only while the command runs.
 
 ## Arguments
-Change name: `$ARGUMENTS`
+
+Change slug: `$1`
+
+If no slug was passed, list the directories under `context/` and ask which
+change to review.
 
 ## Your task
 
-1. **Load** `change.md`, `plan.md`, `implementation-log.md`, and the actual
-   diff of changes (`git diff` against the base branch or the last commit
-   before the change).
+1. **Load the artifacts:** `context/$1/change.md`, `plan.md`,
+   `implementation-log.md`, and `research.md`. If `implementation-log.md`
+   is missing, stop and point to `/implement $1`.
 
-2. **Check three layers:**
+2. **Get the diff.** Read the `Baseline:` field in `change.md`:
+
+   - **A commit sha** → `git diff <baseline>` for the full change, and
+     `git status` for anything uncommitted.
+   - **`no-git`** → there is no diff to take. Reconstruct the change by
+     reading every file listed under `### Files touched` in
+     `implementation-log.md`, and cross-check against
+     `### Files touched` in `plan.md`. Say plainly in `review.md` that the
+     review was file-based, not diff-based, and that pre-existing code in
+     those files could not be separated from new code.
+
+3. **Check three layers:**
 
    ### A. Scope compliance
-   - Was exactly what's in `plan.md` implemented?
-   - Is there any scope creep (code outside the plan)?
-   - Are all "Definition of Done" items from `plan.md` met?
-   - Are all acceptance criteria from `change.md` met?
+   - Was exactly what `plan.md` describes implemented?
+   - Is there scope creep — files or behavior outside the plan?
+   - Is every `Definition of Done` item in `plan.md` met?
+   - Is every acceptance criterion in `change.md` met?
 
    ### B. Code quality
-   - Compliance with project conventions (`CLAUDE.md`, style of
-     neighboring files).
-   - Readability, no dead code, no leftover `TODO`/`console.log`/commented
-     out code.
-   - Handling of edge cases identified in `research.md`.
+   - Conformance to `CLAUDE.md` and the style of neighboring files.
+   - Readability; no dead code, stray `TODO`, debug prints, or commented-out
+     blocks.
+   - Are the edge cases named in `research.md` actually handled?
 
-   ### C. Tests and change safety
-   - Do the tests actually cover the new logic (not just "pass").
-   - Is there a risk of regression in areas not directly related to the
-     change.
+   ### C. Tests and safety
+   - Do the tests exercise the new logic, or merely pass?
+   - Run the test command from `CLAUDE.md` yourself and record the result.
+   - Any regression risk in areas not directly touched?
 
-3. **Build `review.md`**:
+4. **Write `context/$1/review.md`:**
 
    ```markdown
-   # Review: <Change name>
+   # Review: <change name>
+
+   ## Basis
+   <diff against `<sha>` | file-based, no git baseline>
+   Test run: <command> → <result>
 
    ## Scope compliance
-   - [ ] / [x] <item> — comment
+   - [x] / [ ] <item> — comment
 
    ## Issues found
-   ### 🔴 Blocking
-   - ...
+   ### Blocking
+   - [B1] <issue> — `path/file.py:12`
 
-   ### 🟡 Worth considering
-   - ...
+   ### Worth considering
+   - [W1] <issue> — `path/file.py:30`
 
-   ### 🟢 Nice-to-have
-   - ...
+   ### Nice to have
+   - [N1] <issue>
 
    ## Verdict
-   READY / NEEDS FIXES / NEEDS DISCUSSION
+   READY | NEEDS FIXES | NEEDS DISCUSSION
+
+   ## Decisions
+   <filled in at step 5: for each issue — fix now / accept as debt / skip>
    ```
 
-4. **For each issue found** — ask the user directly in the chat to
-   interactively decide: fix now / accept as tech debt / skip. Don't fix
-   things automatically without confirmation — the developer decides what
-   is good enough.
+5. **Take the issues to the user.** List them in the chat by their IDs and
+   ask, for each, whether to fix now, accept as tech debt, or skip. Wait for
+   the answer, then record the outcome in the `## Decisions` section. Never
+   fix anything automatically — the developer decides what is good enough.
 
-5. Update the `## Status` section in `change.md` → `Stage: REVIEWED` (or
-   `NEEDS FIXES` if there are blockers).
+6. **Update `context/$1/change.md`** → `Stage: REVIEWED-READY` if the
+   verdict is READY, otherwise `Stage: REVIEWED-NEEDS-FIXES`.
 
-6. Finish with:
-   > Review complete. Verdict: <READY/NEEDS FIXES>. If READY →
-   > `/archive $ARGUMENTS`. If NEEDS FIXES → go back to
-   > `/implement $ARGUMENTS` after fixes.
+7. Finish with exactly one of:
+
+   > Review complete. Verdict: READY. Next step: `/archive $1`
+
+   > Review complete. Verdict: NEEDS FIXES. Next step:
+   > `/implement $1 fixes`
 
 ## Rules
-- Priority: compliance with the plan > code aesthetics. Beautiful code that
-  does something other than what was planned is not a success at this stage.
-- Don't close a review with blockers without the user's explicit consent.
+
+- Plan compliance outranks code aesthetics. Elegant code that does
+  something other than what was planned is not a pass.
+- Do not close a review with unresolved blockers without the user's
+  explicit consent.
+- Anything you decide not to raise as an issue, do not raise as a
+  suggestion either. Keep the list short enough to act on.
