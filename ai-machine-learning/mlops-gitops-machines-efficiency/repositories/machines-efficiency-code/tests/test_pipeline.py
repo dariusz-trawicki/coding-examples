@@ -9,7 +9,7 @@ from src.model_training import ModelTraining
 
 @pytest.fixture
 def sample_frame():
-    """Syntetyczne dane o strukturze zgodnej z produkcyjnymi."""
+    """Synthetic data with the same structure as the production data."""
     rng = np.random.default_rng(42)
     n = 120
 
@@ -30,24 +30,24 @@ def fitted_pipeline(sample_frame):
 
 
 def test_pipeline_is_single_artifact(fitted_pipeline):
-    """Preprocessing i model muszą być jednym obiektem — inaczej wraca ryzyko
-    rozjazdu między treningiem a serwowaniem."""
+    """Preprocessing and model must be a single object - otherwise the risk of
+    training/serving skew comes back."""
     assert isinstance(fitted_pipeline, Pipeline)
     assert "preprocess" in fitted_pipeline.named_steps
     assert "model" in fitted_pipeline.named_steps
 
 
 def test_accepts_raw_dataframe(fitted_pipeline, sample_frame):
-    """Pipeline przyjmuje surowe dane z kategoriami jako stringi — dokładnie to,
-    co przysyła formularz."""
+    """The pipeline accepts raw data with categories as strings - exactly what
+    the form sends."""
     pred = fitted_pipeline.predict(sample_frame.head(1))
     assert pred.shape == (1,)
     assert pred[0] in {0, 1, 2}
 
 
 def test_categorical_is_one_hot_encoded(fitted_pipeline):
-    """LabelEncoder na Operation_Mode dałby regresji logistycznej fałszywą
-    skalę porządkową."""
+    """A LabelEncoder on Operation_Mode would give logistic regression a
+    spurious ordinal scale."""
     preprocessor = fitted_pipeline.named_steps["preprocess"]
     encoder = dict(
         (name, trans) for name, trans, _ in preprocessor.transformers_
@@ -57,23 +57,23 @@ def test_categorical_is_one_hot_encoded(fitted_pipeline):
 
 
 def test_unknown_category_does_not_raise(fitted_pipeline, sample_frame):
-    """handle_unknown='ignore' — nieznana wartość nie może wywalić serwera."""
+    """handle_unknown='ignore' - an unknown value must not bring down the server."""
     row = sample_frame.head(1).copy()
     row["Operation_Mode"] = "Sabotage"
     assert fitted_pipeline.predict(row).shape == (1,)
 
 
 def test_column_order_is_irrelevant(fitted_pipeline, sample_frame):
-    """ColumnTransformer adresuje kolumny po nazwach — przestawienie ich
-    nie może zmienić wyniku."""
+    """ColumnTransformer addresses columns by name - reordering them must not
+    change the result."""
     row = sample_frame.head(1)
     shuffled = row[list(reversed(FEATURES))]
     assert fitted_pipeline.predict(row)[0] == fitted_pipeline.predict(shuffled)[0]
 
 
 def test_scaler_not_fitted_on_full_data(sample_frame):
-    """Wyciek danych: scaler widzi tylko trening. Statystyki z połowy zbioru
-    muszą różnić się od statystyk z całości."""
+    """Data leakage: the scaler only ever sees the training set. Statistics from
+    half the data must differ from statistics over the whole set."""
     from sklearn.preprocessing import StandardScaler
 
     half = sample_frame[NUMERIC].iloc[: len(sample_frame) // 2]

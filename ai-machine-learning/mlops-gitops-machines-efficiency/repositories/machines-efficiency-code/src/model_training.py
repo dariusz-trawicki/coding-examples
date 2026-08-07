@@ -75,7 +75,7 @@ class ModelTraining:
             logger.info(f"\n{report}")
 
             if accuracy < MIN_ACCURACY:
-                raise ValueError(f"Accuracy {accuracy:.4f} poniżej progu {MIN_ACCURACY}")
+                raise ValueError(f"Accuracy {accuracy:.4f} below the threshold {MIN_ACCURACY}")
 
             joblib.dump(self.clf, os.path.join(self.model_path, "model.pkl"))
             joblib.dump(self.label_encoder, os.path.join(self.model_path, "label_encoder.pkl"))

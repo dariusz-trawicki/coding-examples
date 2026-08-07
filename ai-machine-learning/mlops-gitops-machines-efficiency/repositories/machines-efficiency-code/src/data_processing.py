@@ -42,7 +42,7 @@ class DataProcessing:
         try:
             ts = pd.to_datetime(self.df["Timestamp"], errors="coerce")
             if ts.isna().any():
-                raise ValueError(f"Nieparsowalne znaczniki czasu: {int(ts.isna().sum())}")
+                raise ValueError(f"Unparseable timestamps: {int(ts.isna().sum())}")
 
             self.df["Year"] = ts.dt.year
             self.df["Month"] = ts.dt.month
@@ -51,13 +51,13 @@ class DataProcessing:
 
             missing = set([*FEATURES, TARGET]) - set(self.df.columns)
             if missing:
-                raise ValueError(f"Brakujące kolumny: {sorted(missing)}")
+                raise ValueError(f"Missing columns: {sorted(missing)}")
 
             for col in CATEGORICAL:
                 self.df[col] = self.df[col].astype(str)
 
             if self.df["Year"].nunique() == 1:
-                logger.warning("Kolumna Year ma zerową wariancję — rozważ usunięcie")
+                logger.warning("Year column has zero variance - consider dropping it")
 
             logger.info("All basic data preprocessing done..")
         except Exception as e:
@@ -82,7 +82,7 @@ class DataProcessing:
             ]:
                 joblib.dump(obj, os.path.join(self.output_path, f"{name}.pkl"))
 
-            logger.info(f"Splity zapisane. Klasy: {list(label_encoder.classes_)}")
+            logger.info(f"Splits saved. Classes: {list(label_encoder.classes_)}")
         except Exception as e:
             logger.error(f"Error while split and save data {e}")
             raise CustomException("Failed to split and save data", e) from e

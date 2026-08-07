@@ -63,7 +63,7 @@ def index():
             for name, allowed in CATEGORICAL.items():
                 value = request.form[name]
                 if value not in allowed:
-                    raise ValueError(f"{name}: nieoczekiwana wartość")
+                    raise ValueError(f"{name}: unexpected value")
                 row[name] = value
             for name in NUMERIC:
                 row[name] = float(request.form[name])
@@ -73,11 +73,11 @@ def index():
             prediction = label_encoder.inverse_transform([pred])[0]
 
         except (KeyError, ValueError) as exc:
-            logger.warning("Nieprawidłowe dane wejściowe: %s", exc)
-            error = "Nieprawidłowe dane wejściowe — sprawdź wszystkie pola."
+            logger.warning("Invalid input data: %s", exc)
+            error = "Invalid input data - please check all fields."
         except Exception:
-            logger.exception("Błąd predykcji")
-            error = "Wystąpił błąd podczas predykcji."
+            logger.exception("Prediction error")
+            error = "An error occurred during prediction."
 
     return render_template(
         "index.html",
