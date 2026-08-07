@@ -36,7 +36,7 @@ class DataProcessing:
             logger.info("Data loaded successfully...")
         except Exception as e:
             logger.error(f"Error while loading data {e}")
-            raise CustomException("Failed to load data", e)
+            raise CustomException("Failed to load data", e) from e
 
     def preprocess(self):
         try:
@@ -49,7 +49,7 @@ class DataProcessing:
             self.df["Day"] = ts.dt.day
             self.df["Hour"] = ts.dt.hour
 
-            missing = set(FEATURES + [TARGET]) - set(self.df.columns)
+            missing = set([*FEATURES, TARGET]) - set(self.df.columns)
             if missing:
                 raise ValueError(f"Brakujące kolumny: {sorted(missing)}")
 
@@ -62,7 +62,7 @@ class DataProcessing:
             logger.info("All basic data preprocessing done..")
         except Exception as e:
             logger.error(f"Error while preprocessing data {e}")
-            raise CustomException("Failed to preprocess data", e)
+            raise CustomException("Failed to preprocess data", e) from e
 
     def split_and_save(self):
         try:
@@ -85,7 +85,7 @@ class DataProcessing:
             logger.info(f"Splity zapisane. Klasy: {list(label_encoder.classes_)}")
         except Exception as e:
             logger.error(f"Error while split and save data {e}")
-            raise CustomException("Failed to split and save data", e)
+            raise CustomException("Failed to split and save data", e) from e
 
     def run(self):
         self.load_data()

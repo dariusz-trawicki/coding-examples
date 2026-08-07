@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 from sklearn.pipeline import Pipeline
 
-from src.data_processing import CATEGORICAL, FEATURES, NUMERIC
+from src.data_processing import FEATURES, NUMERIC
 from src.model_training import ModelTraining
 
 

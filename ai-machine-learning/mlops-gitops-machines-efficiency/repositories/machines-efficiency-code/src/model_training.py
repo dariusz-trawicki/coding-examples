@@ -36,7 +36,7 @@ class ModelTraining:
             logger.info("Data loaded successfully...")
         except Exception as e:
             logger.error(f"Error while loading data {e}")
-            raise CustomException("Failed to load data", e)
+            raise CustomException("Failed to load data", e) from e
 
     def train_model(self):
         try:
@@ -58,7 +58,7 @@ class ModelTraining:
             logger.info("Model trained successfully...")
         except Exception as e:
             logger.error(f"Error while training model {e}")
-            raise CustomException("Failed to train model", e)
+            raise CustomException("Failed to train model", e) from e
 
     def evaluate_model(self):
         try:
@@ -89,7 +89,7 @@ class ModelTraining:
             logger.info("Model Evaluation Done..")
         except Exception as e:
             logger.error(f"Error while evaluating model {e}")
-            raise CustomException("Failed to evaluate model", e)
+            raise CustomException("Failed to evaluate model", e) from e
 
     def run(self):
         self.load_data()
