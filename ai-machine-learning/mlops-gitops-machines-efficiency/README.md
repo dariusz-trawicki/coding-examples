@@ -129,6 +129,7 @@ neglected minority class.
 
 ```bash
 uv sync
+uv run pytest -q # testy
 uv run python -m pipeline.training_pipeline
 ```
 
