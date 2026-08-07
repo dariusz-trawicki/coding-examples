@@ -23,6 +23,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Lint and test
+        run: |
+          uv sync --group dev
+          uv run ruff check .
+          uv run pytest -q
+
       - name: Authenticate to Google Cloud (WIF)
         uses: google-github-actions/auth@v2
         with:
@@ -32,11 +41,20 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker $REGISTRY --quiet
+      
+      - name: Build
+        run: docker build -t "$IMAGE:$GITHUB_SHA" .
 
-      - name: Build and push
-        run: |
-          docker build -t "$IMAGE:$GITHUB_SHA" .
-          docker push "$IMAGE:$GITHUB_SHA"
+      - name: Scan image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          ignore-unfixed: true
+
+      - name: Push
+        run: docker push "$IMAGE:$GITHUB_SHA"
 
       - name: Checkout config repo
         uses: actions/checkout@v4
