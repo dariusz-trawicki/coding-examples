@@ -5,7 +5,7 @@
 # dependencies = ["pillow", "anthropic", "python-dotenv"]
 # ///
 """
-PROGRAM 2 of 2: field extraction with SOURCE EVIDENCE - model-based.
+PROGRAM 2 of 3: field extraction with SOURCE EVIDENCE - model-based.
 
 Same pipeline as 01_regex_extraction.py, with one part replaced: fields are
 extracted by a language model instead of regular expressions. Everything

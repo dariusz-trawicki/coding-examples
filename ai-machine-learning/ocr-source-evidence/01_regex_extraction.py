@@ -5,7 +5,7 @@
 # dependencies = ["pillow"]
 # ///
 """
-PROGRAM 1 of 2: field extraction with SOURCE EVIDENCE - rule-based.
+PROGRAM 1 of 3: field extraction with SOURCE EVIDENCE - rule-based.
 
 Extraction here uses regular expressions. No API key, no cost, no network.
 Program 2 (02_llm_extraction.py) does the same job with a language model.
