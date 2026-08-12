@@ -297,7 +297,6 @@ All three programs share the same four-part layout:
 ├── 03_azure_ocr.py            Azure DI + regex, prints engine comparison
 ├── sample.pdf                 synthetic court judgment
 ├── .env.example               API key template
-├── setup_azure.sh             Azure CLI provisioning
 └── terraform/
     ├── main.tf                Document Intelligence resource, F0 tier
     ├── outputs.tf             endpoint + key
