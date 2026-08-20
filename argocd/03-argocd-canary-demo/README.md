@@ -633,19 +633,3 @@ The repo alone, without the cluster:
 ```bash
 gh repo delete argocd-canary-demo --yes
 ```
-
-## Troubleshooting
-
-| Symptom | Cause and fix |
-|---|---|
-| `The connection to the server localhost:8080 was refused` | No current context. `kubectl config current-context` returns an error → the cluster does not exist or was never selected. Create it, or `kubectl config use-context kind-canary-demo`. |
-| `kind create` → `node(s) already exist for a cluster with the name ...` | A previous cluster with that name is still around. `kind export kubeconfig --name canary-demo` to reuse it, or `kind delete cluster --name canary-demo` for a clean start. |
-| `kind export kubeconfig` → `cat: /etc/kubernetes/admin.conf: No such file or directory` | A previous `kind create` aborted midway and left a half-initialised node. Delete and recreate; if it recurs, check Docker's memory and disk limits. |
-| `sed: invalid command code m` (macOS) | BSD `sed -i` needs a backup suffix. Use `perl -pi -e` instead, or `sed -i ''`. |
-| `git commit` → `nothing to commit` right after an edit | The substitution silently failed. Always `grep` the file before committing. |
-| `kubectl run ... ` prints nothing | Without `-i` the client attaches after the container has already exited. Use `kubectl exec` against an existing pod, or add `-i` and drop `-q`. With a pipe, use `-i` alone — never `-it`, which hangs. |
-| `kubectl exec -l app=web` → `unknown shorthand flag: 'l'` | `exec` takes no label selector. Resolve the pod name first with `kubectl get pod -l ... -o jsonpath=...`. |
-| Rollout ignores the commit | Only `spec.template` triggers a rollout. Editing ConfigMap contents under the same name, or changing `spec.strategy`, does not. |
-| Traffic loop returns only the new version | The rollout already reached 100%. Lengthen the pauses or switch to `pause: {}` (section 7). |
-| `argocd` CLI reports a certificate for an unrelated domain | The CLI remembers a previous login. Check `argocd context`, or skip the CLI — everything here works through `kubectl`. |
-| `AnalysisRun` in `Error` state | The Job could not reach the service — check the `args.service-name` value. |
